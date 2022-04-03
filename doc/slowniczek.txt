@@ -1,0 +1,17 @@
+Słowniczek
+ 
+Czynność - wykonanie prac eksploatacyjnych lub serwisowych (typu lakierowanie lub mycie)
+
+Pracownik - osoba korzystająca z aplikacji. 
+
+Opiekun - pracownik odpowiedzialny za serwisowanie pojazdu
+
+Administrator - pracownik mający największe uprawnienia. Jest odpowiedzialny za zarządzanie resztą pracowników, ma podgląd do statystyk oraz uprawnienia opiekuna. 
+
+Firma zewnętrzna - firma obsługująca prace serwisowe lub eksploatacyjne.
+
+Rezerwacja - tymczasowe użycie pojazdu przez pracownika. Każda rejestracja musi zostać zarejestrowana.
+
+Statystyki pracownika - podsumowanie kosztów poniesionych na eksploatację i obsługę pojazdów .
+
+Statystyki pojazdu - podsumowanie liczby kilometrów, czasu i ewentualnych kosztów wygenerowanych przez danego pracownika.
