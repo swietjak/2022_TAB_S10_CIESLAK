@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS public.reservations
     date_from date NOT NULL,
     date_to date NOT NULL,
     worker_id integer NOT NULL,
-    fuel_consumption integer NOT NULL,
     vechicle_id integer NOT NULL,
     PRIMARY KEY (id)
 );
@@ -49,6 +48,7 @@ CREATE TABLE IF NOT EXISTS public.vechicle_returns
     description text,
     reservation_id integer NOT NULL,
     meter_indication integer NOT NULL,
+    fuel_consumption integer NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -58,11 +58,11 @@ CREATE TABLE IF NOT EXISTS public.vechicles_cares
     vechicle_id integer NOT NULL,
     worker_id integer NOT NULL,
     start_date date NOT NULL,
-    end_date date NOT NULL,
+    end_date date,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.equipment
+CREATE TABLE IF NOT EXISTS public.equipments
 (
     id integer NOT NULL,
     name text NOT NULL,
@@ -83,13 +83,15 @@ CREATE TABLE IF NOT EXISTS public.car_absenses
     start_date date NOT NULL,
     end_date date NOT NULL,
     vechicle_id integer NOT NULL,
+    description text,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS public.services
 (
     id integer NOT NULL,
-    name text NOT NULL
+    name text NOT NULL,
+	PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS public.service_executions
@@ -103,6 +105,7 @@ CREATE TABLE IF NOT EXISTS public.service_executions
     description text,
     is_finished boolean NOT NULL,
     vechicle_care_id integer NOT NULL,
+    external_servicer_id integer NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -177,7 +180,7 @@ ALTER TABLE IF EXISTS public.vechicle_equipment
 
 ALTER TABLE IF EXISTS public.vechicle_equipment
     ADD FOREIGN KEY (equipment_id)
-    REFERENCES public.equipment (id) MATCH SIMPLE
+    REFERENCES public.equipments (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -210,6 +213,14 @@ ALTER TABLE IF EXISTS public.service_executions
 ALTER TABLE IF EXISTS public.service_executions
     ADD FOREIGN KEY (vechicle_care_id)
     REFERENCES public.vechicles_cares (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.service_executions
+    ADD FOREIGN KEY (external_servicer_id)
+    REFERENCES public.external_servicers (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
