@@ -1,0 +1,12 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "DbContextSettings": {
+    "ConnectionString": "Host=0.0.0.0;Database=world;Port=5432;User Id=postgres;Password=pwd;Pooling=true;"
+  }
+}
