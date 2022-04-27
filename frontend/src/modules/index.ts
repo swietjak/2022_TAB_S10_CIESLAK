@@ -1,8 +1,10 @@
 import home from "./home";
+import reservations from "./reservations";
 
 export const reducers = {
   // Add reducers below
   [home.name]: home.reducer,
+  [reservations.name]: reservations.reducer,
 };
 
-export const routes = [...home.routes];
+export { default as ModalRoutes } from "./ModulesRoutes";

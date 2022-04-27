@@ -1,5 +1,6 @@
-import { styled } from "@mui/material";
+import { Grid, styled } from "@mui/material";
 
-export const Container = styled("div")(({ theme }) => ({
+export const PageWrapper = styled(Grid)(({ theme }) => ({
+  padding: theme.spacing(1, 2, 1, 1),
   background: "teal",
 }));

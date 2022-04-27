@@ -3,10 +3,9 @@ import { Suspense } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "config";
 import { Loader } from "shared/components";
-import { routes } from "modules";
 import { store } from "./App.store";
 import { BrowserRouter } from "react-router-dom";
-import Hello from "modules/home/pages/Hello";
+import { ModalRoutes } from "modules";
 
 const App = () => {
   return (
@@ -15,7 +14,8 @@ const App = () => {
         <CssBaseline />
         <Suspense fallback={<Loader />}>
           <BrowserRouter>
-            <Hello />
+            <div>Test Topbar</div>
+            <ModalRoutes />
           </BrowserRouter>
         </Suspense>
       </ThemeProvider>
