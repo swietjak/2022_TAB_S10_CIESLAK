@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LoadingStatus } from "shared/types";
@@ -13,7 +13,7 @@ const ReservationsTable = () => {
     dispatch(actions.getUserReservations());
   }, [dispatch]);
 
-  if (loading === LoadingStatus.Pending) return <div>XDDDD</div>;
+  if (loading === LoadingStatus.Pending) return <CircularProgress />;
 
   return (
     <Grid container>

@@ -6,6 +6,10 @@ const routes = [
     path: paths.hello,
     element: () => <Hello />,
   },
+  {
+    path: paths.goodbye,
+    element: () => <div>Goodbye</div>,
+  },
 ];
 
 export default routes;
