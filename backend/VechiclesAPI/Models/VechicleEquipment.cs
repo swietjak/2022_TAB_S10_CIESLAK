@@ -9,7 +9,7 @@ namespace VechiclesAPI.Models
         public int EquipmentId { get; set; }
         public int? Amount { get; set; }
 
-        public virtual Equipment? Equipment { get; set; }
-        public virtual Vechicle? Vechicle { get; set; }
+        public virtual Equipment Equipment { get; set; }
+        public virtual Vechicle Vechicle { get; set; }
     }
 }
