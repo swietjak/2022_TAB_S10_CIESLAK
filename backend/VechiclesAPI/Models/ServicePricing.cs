@@ -11,6 +11,6 @@ namespace VechiclesAPI.Models
         public DateOnly StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
 
-        public virtual OfferedService? OfferedService { get; set; }
+        public virtual OfferedService OfferedService { get; set; }
     }
 }

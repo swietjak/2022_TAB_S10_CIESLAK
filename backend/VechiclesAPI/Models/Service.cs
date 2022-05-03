@@ -8,13 +8,11 @@ namespace VechiclesAPI.Models
         public Service()
         {
             OfferedServices = new HashSet<OfferedService>();
-            ServiceExecutions = new HashSet<ServiceExecution>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
         public virtual ICollection<OfferedService> OfferedServices { get; set; }
-        public virtual ICollection<ServiceExecution> ServiceExecutions { get; set; }
     }
 }
