@@ -11,7 +11,7 @@ namespace VechiclesAPI.Models
         public DateOnly StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
 
-        public virtual Vechicle? Vechicle { get; set; }
-        public virtual Worker? Worker { get; set; }
+        public virtual Vechicle Vechicle { get; set; }
+        public virtual Worker Worker { get; set; }
     }
 }

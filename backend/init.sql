@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.reservations
     date_to date NOT NULL,
     worker_id integer NOT NULL,
     vechicle_id integer NOT NULL,
-    rental_id integer,
+    description text,
     PRIMARY KEY (id)
 );
 
@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS public.workers
     first_name text NOT NULL,
     surname text NOT NULL,
     pesel character varying(11) NOT NULL,
+    password text NOT NULL,
     hasCarePermissions boolean,
     isAdmin boolean,
     PRIMARY KEY (id)
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS public.rentals
     reservation_id integer NOT NULL,
     meter_indication integer NOT NULL,
     vechicle_return_id integer,
+    UNIQUE(reservation_id),
     PRIMARY KEY (id)
 );
 
@@ -49,9 +51,10 @@ CREATE TABLE IF NOT EXISTS public.vechicle_returns
     id integer NOT NULL,
     date date NOT NULL,
     description text,
-    reservation_id integer NOT NULL,
     meter_indication integer NOT NULL,
-    fuel_consumption integer NOT NULL,
+    fuel_consumption double precision NOT NULL,
+    rental_id integer NOT NULL,
+    UNIQUE(rental_id),
     PRIMARY KEY (id)
 );
 
@@ -101,14 +104,13 @@ CREATE TABLE IF NOT EXISTS public.services
 CREATE TABLE IF NOT EXISTS public.service_executions
 (
     id integer NOT NULL,
-    service_id integer NOT NULL,
     vechicle_id integer NOT NULL,
     start_date date NOT NULL,
     end_date date NOT NULL,
     description text,
     is_finished boolean NOT NULL,
     vechicle_care_id integer NOT NULL,
-    offered_service_id integer NOT NULL,
+    service_pricing_id integer NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -121,9 +123,9 @@ CREATE TABLE IF NOT EXISTS public.external_servicers
 
 CREATE TABLE IF NOT EXISTS public.offered_services
 (
+    id integer NOT NULL,
     service_id integer NOT NULL,
     external_servicer_id integer NOT NULL,
-    id integer NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -153,25 +155,17 @@ ALTER TABLE IF EXISTS public.reservations
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.reservations
-    ADD FOREIGN KEY (rental_id)
-    REFERENCES public.rentals (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-
 ALTER TABLE IF EXISTS public.rentals
-    ADD FOREIGN KEY (vechicle_return_id)
-    REFERENCES public.vechicle_returns (id) MATCH SIMPLE
+    ADD FOREIGN KEY (reservation_id)
+    REFERENCES public.reservations (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
 ALTER TABLE IF EXISTS public.vechicle_returns
-    ADD FOREIGN KEY (reservation_id)
-    REFERENCES public.reservations (id) MATCH SIMPLE
+    ADD FOREIGN KEY (rental_id)
+    REFERENCES public.rentals (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -216,17 +210,9 @@ ALTER TABLE IF EXISTS public.car_absenses
     ON DELETE NO ACTION
     NOT VALID;
 
-
 ALTER TABLE IF EXISTS public.service_executions
-    ADD FOREIGN KEY (service_id)
-    REFERENCES public.services (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-    NOT VALID;
-
-ALTER TABLE IF EXISTS public.service_executions
-    ADD FOREIGN KEY (offered_service_id)
-    REFERENCES public.offered_services (id) MATCH SIMPLE
+    ADD FOREIGN KEY (service_pricing_id)
+    REFERENCES public.service_pricing (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -264,5 +250,88 @@ ALTER TABLE IF EXISTS public.service_pricing
     NOT VALID;
 
 END;
+
+INSERT INTO 
+    public.workers (id, first_name, surname, pesel, password, hasCarePermissions, isAdmin)
+VALUES
+    (1, 'Jan', 'Kowalski', '12345678', 'AA', true, true),
+    (2, 'Jan', 'Nowak', '12345678', 'AA', true, false),
+    (3, 'Jan', 'Bowak', '123456789', 'AA', true, false),
+    (4, 'Jan', 'Mowak', '123456789', 'AA', false, false),
+    (5, 'Jan', 'Lowak', '123456789', 'AA', false, false),
+    (6, 'Jan', 'Dowak', '123456789', 'AA', false, false);
+
+INSERT INTO 
+    public.services (id, name)
+VALUES
+    (1, 'czyszczenie'),
+    (2, 'lakierowanie'),
+    (3, 'naprawa elektroniki');
+
+INSERT INTO 
+    public.external_servicers (id, name)
+VALUES
+    (1, 'Czyszczopol'),
+    (2, 'Lakieromex'),
+    (3, 'Elektrykopol');
+
+INSERT INTO 
+    public.offered_services (id, service_id, external_servicer_id)
+VALUES
+    (1, 1, 1),
+    (2, 2, 2),
+    (3, 3, 3);
+    
+INSERT INTO 
+    public.service_pricing ( id, offered_service_id, price, start_date, end_date)
+VALUES
+    (1, 1, 10, '1996-12-02', null),
+    (2, 2, 20, '1996-12-02', null),
+    (3, 3, 30, '1996-12-02', null);
+
+INSERT INTO 
+    public.equipments ( id, name, description)
+VALUES
+    (1, 'gasnica', 'gasi'),
+    (2, 'kabel holowniczy', 'holuje'),
+    (3, 'dzik', 'jest dziki');
+
+INSERT INTO 
+    public.vechicles (id, brand, model, vin)
+VALUES
+    (1, 'subaru', 'impreza', 'JF1GD70625L518106'),
+    (2, 'bmw', 'e36', 'JF1GD70625L518106'),
+    (3, 'audi', 'a6', 'JF1GD70625L518106'),
+    (4, 'audi', 'a4', 'JF1GD70625L518106'),
+    (5, 'audi', 'a3', 'JF1GD70625L518106');
+
+
+INSERT INTO 
+    public.vechicle_equipment (vechicle_id, equipment_id, amount)
+VALUES
+    (1, 1, 2),
+    (1, 2, 1),
+    (1, 3, 1),
+    (2, 3, 1),
+    (3, 3, 1),
+    (4, 3, 1),
+    (5, 3, 1);
+
+INSERT INTO 
+    public.vechicles_cares (id, vechicle_id, worker_id, start_date, end_date)
+VALUES
+    (1, 1, 2, '2020-12-02', null),
+    (2, 2, 2, '2020-12-02', null),
+    (3, 3, 3, '2020-12-02', '2023-12-02'),
+    (4, 4, 3, '2020-12-02', '2021-12-02'),
+    (5, 5, 3, '2020-12-02', null);
+
+COMMIT;
+
+
+
+
+
+
 
 
