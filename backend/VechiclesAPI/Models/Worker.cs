@@ -15,6 +15,7 @@ namespace VechiclesAPI.Models
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public string Pesel { get; set; }
+        public string Password { get; set; }
         public bool? Hascarepermissions { get; set; }
         public bool? Isadmin { get; set; }
 
