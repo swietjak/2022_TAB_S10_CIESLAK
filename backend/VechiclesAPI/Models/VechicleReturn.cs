@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VechiclesAPI.Models
+namespace VehiclesAPI.Models
 {
-    public partial class VechicleReturn
+    public partial class VehicleReturn
     {
         public int Id { get; set; }
         public DateOnly Date { get; set; }

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VechiclesAPI.Models
+namespace VehiclesAPI.Models
 {
-    public partial class VechicleEquipment
+    public partial class VehicleEquipment
     {
-        public int VechicleId { get; set; }
+        public int VehicleId { get; set; }
         public int EquipmentId { get; set; }
         public int? Amount { get; set; }
 
         public virtual Equipment Equipment { get; set; }
-        public virtual Vechicle Vechicle { get; set; }
+        public virtual Vehicle Vehicle { get; set; }
     }
 }
