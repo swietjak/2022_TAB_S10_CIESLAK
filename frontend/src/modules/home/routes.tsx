@@ -1,7 +1,11 @@
 import { paths } from "config";
-import Hello from "./pages/Hello";
+import { Hello, Login } from "./pages";
 
 const routes = [
+  {
+    path: paths.login,
+    element: () => <Login />,
+  },
   {
     path: paths.hello,
     element: () => <Hello />,
