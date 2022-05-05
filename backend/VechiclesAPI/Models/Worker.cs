@@ -18,7 +18,7 @@ namespace VehiclesAPI.Models
         public string Password { get; set; }
         public bool? Hascarepermissions { get; set; }
         public bool? Isadmin { get; set; }
-        public bool? Email { get; set; }
+        public string Email { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
         public virtual ICollection<VehiclesCare> VehiclesCares { get; set; }
