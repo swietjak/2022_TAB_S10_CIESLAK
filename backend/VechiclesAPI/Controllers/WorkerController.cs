@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using VechiclesAPI.Models;
+using VehiclesAPI.Models;
 
-namespace VechiclesAPI.Controllers
+namespace VehiclesAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

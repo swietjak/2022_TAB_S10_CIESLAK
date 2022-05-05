@@ -19,6 +19,7 @@ const ReservationsTableRow = ({
     () =>
       generatePath(paths.reservationSummary, {
         reservationId: reservationId.toString(),
+        myNumber: (2137).toString(),
       }),
     [reservationId]
   );

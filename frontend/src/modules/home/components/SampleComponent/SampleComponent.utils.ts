@@ -3,16 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { actions, selectors } from "../../store";
 
 export const useMultipliedNum = (initialNum: number) => {
-  const [num, setNum] = useState(initialNum);
+  const [num, setNum] = useState<number>(initialNum);
   const [sampleState, setSampleState] = useState(false);
 
   useEffect(() => {
     setNum((num) => num + 1);
   }, [sampleState]);
 
-  const handleClick = useCallback(() => {
-    setSampleState(!sampleState);
-  }, [sampleState]);
+  const handleClick = () => setSampleState((sampleState) => !sampleState);
 
   return { num, handleClick };
 };

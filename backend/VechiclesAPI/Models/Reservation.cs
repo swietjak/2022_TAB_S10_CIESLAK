@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VechiclesAPI.Models
+namespace VehiclesAPI.Models
 {
     public partial class Reservation
     {
@@ -9,10 +9,10 @@ namespace VechiclesAPI.Models
         public DateOnly DateFrom { get; set; }
         public DateOnly DateTo { get; set; }
         public int WorkerId { get; set; }
-        public int VechicleId { get; set; }
+        public int VehicleId { get; set; }
         public string? Description { get; set; }
 
-        public virtual Vechicle Vechicle { get; set; }
+        public virtual Vehicle Vehicle { get; set; }
         public virtual Worker Worker { get; set; }
         public virtual Rental Rental { get; set; }
     }

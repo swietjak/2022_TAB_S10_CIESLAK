@@ -1,7 +1,11 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { paths } from "config";
-import { generatePath, useNavigate } from "react-router";
-import { PageWrapper } from "./SampleComponent.styles";
+import { useNavigate } from "react-router";
+import {
+  PageWrapper,
+  CustomGrid,
+  StyledTypography,
+} from "./SampleComponent.styles";
 import { useMultipliedNum, useReduxIncrement } from "./SampleComponent.utils";
 
 interface SampleComponentProps {
@@ -19,17 +23,19 @@ const SampleComponent = ({ initialNum }: SampleComponentProps) => {
   const navigate = useNavigate();
   return (
     <PageWrapper container spacing={3}>
-      <Grid item container xs={6} justifyContent="center">
+      <CustomGrid item container xs={6} justifyContent="center">
         <Grid item xs>
-          <Typography variant="body2">{stateNumber}</Typography>
+          <Typography color="#fff" variant="body2">
+            {stateNumber}
+          </Typography>
         </Grid>
         <Grid item xs>
           <Button onClick={handleClick}>Increment!</Button>
         </Grid>
-      </Grid>
+      </CustomGrid>
       <Grid item container xs={6} justifyContent="center">
         <Grid item>
-          <Typography variant="subtitle1">{reduxNumber}</Typography>
+          <StyledTypography variant="subtitle1">{reduxNumber}</StyledTypography>
         </Grid>
         <Grid item container justifyContent="center">
           <Grid item>
@@ -44,9 +50,7 @@ const SampleComponent = ({ initialNum }: SampleComponentProps) => {
           </Grid>
         </Grid>
       </Grid>
-      <Button onClick={() => navigate(generatePath(paths.reservationsTable))}>
-        XDDD
-      </Button>
+      <Button onClick={() => navigate(paths.reservationsTable)}>XDDD</Button>
     </PageWrapper>
   );
 };

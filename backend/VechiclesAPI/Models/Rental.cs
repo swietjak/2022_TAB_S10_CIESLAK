@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VechiclesAPI.Models
+namespace VehiclesAPI.Models
 {
     public partial class Rental
     {
@@ -10,9 +10,9 @@ namespace VechiclesAPI.Models
         public string Description { get; set; }
         public int ReservationId { get; set; }
         public int MeterIndication { get; set; }
-        public int? VechicleReturnId { get; set; }
+        public int? VehicleReturnId { get; set; }
 
         public virtual Reservation Reservation { get; set; }
-        public virtual VechicleReturn VechicleReturn { get; set; }
+        public virtual VehicleReturn VehicleReturn { get; set; }
     }
 }

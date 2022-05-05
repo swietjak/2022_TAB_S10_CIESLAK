@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VechiclesAPI.Models
+namespace VehiclesAPI.Models
 {
     public partial class Worker
     {
         public Worker()
         {
             Reservations = new HashSet<Reservation>();
-            VechiclesCares = new HashSet<VechiclesCare>();
+            VehiclesCares = new HashSet<VehiclesCare>();
         }
 
         public int Id { get; set; }
@@ -18,8 +18,9 @@ namespace VechiclesAPI.Models
         public string Password { get; set; }
         public bool? Hascarepermissions { get; set; }
         public bool? Isadmin { get; set; }
+        public bool? Email { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
-        public virtual ICollection<VechiclesCare> VechiclesCares { get; set; }
+        public virtual ICollection<VehiclesCare> VehiclesCares { get; set; }
     }
 }
