@@ -18,8 +18,8 @@ const ReservationsTable = () => {
   return (
     <Grid container>
       heheh
-      {data &&
-        data.map((reservation) => <ReservationsTableRow {...reservation} />)}
+      {/* {data &&
+        data.map(reservation => <ReservationsTableRow {...reservation} />)} */}
     </Grid>
   );
 };

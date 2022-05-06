@@ -1,8 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { helloRoutes } from "./home";
 import { reservationsRoutes } from "./reservations";
+import { vehiclesRoutes } from "./vehicles";
 
-const routes = [...reservationsRoutes, ...helloRoutes];
+const routes = [...reservationsRoutes, ...helloRoutes, ...vehiclesRoutes];
 
 const ModalRoutes = () => {
   return (

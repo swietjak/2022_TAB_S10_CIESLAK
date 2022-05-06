@@ -5,6 +5,10 @@ import { reducers } from "modules";
 
 export const store = configureStore({
   reducer: combineReducers({ ...reducers, common: commonStore.reducer }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export const persistor = persistStore(store);
