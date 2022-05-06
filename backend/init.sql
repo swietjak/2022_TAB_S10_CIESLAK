@@ -4,7 +4,7 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.vechicles
 (
-    id integer,
+    id serial,
     brand text NOT NULL,
     model text NOT NULL,
     vin text NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS public.vechicles
 
 CREATE TABLE IF NOT EXISTS public.reservations
 (
-    id integer NOT NULL,
+    id serial,
     date_from date NOT NULL,
     date_to date NOT NULL,
     worker_id integer NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public.reservations
 
 CREATE TABLE IF NOT EXISTS public.workers
 (
-    id integer,
+    id serial,
     first_name text NOT NULL,
     surname text NOT NULL,
     pesel character varying(11) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS public.workers
 
 CREATE TABLE IF NOT EXISTS public.rentals
 (
-    id integer NOT NULL,
+    id serial,
     date date NOT NULL,
     description text,
     reservation_id integer NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS public.rentals
 
 CREATE TABLE IF NOT EXISTS public.vechicle_returns
 (
-    id integer NOT NULL,
+    id serial,
     date date NOT NULL,
     description text,
     meter_indication integer NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS public.vechicle_returns
 
 CREATE TABLE IF NOT EXISTS public.vechicles_cares
 (
-    id integer NOT NULL,
+    id serial,
     vechicle_id integer NOT NULL,
     worker_id integer NOT NULL,
     start_date date NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS public.vechicles_cares
 
 CREATE TABLE IF NOT EXISTS public.equipments
 (
-    id integer NOT NULL,
+    id serial,
     name text NOT NULL,
     description text NOT NULL,
     PRIMARY KEY (id)
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS public.vechicle_equipment
 
 CREATE TABLE IF NOT EXISTS public.car_absenses
 (
-    id integer NOT NULL,
+    id serial,
     start_date date NOT NULL,
     end_date date NOT NULL,
     vechicle_id integer NOT NULL,
@@ -99,14 +99,14 @@ CREATE TABLE IF NOT EXISTS public.car_absenses
 
 CREATE TABLE IF NOT EXISTS public.services
 (
-    id integer NOT NULL,
+    id serial,
     name text NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS public.service_executions
 (
-    id integer NOT NULL,
+    id serial,
     vechicle_id integer NOT NULL,
     start_date date NOT NULL,
     end_date date NOT NULL,
@@ -119,14 +119,14 @@ CREATE TABLE IF NOT EXISTS public.service_executions
 
 CREATE TABLE IF NOT EXISTS public.external_servicers
 (
-    id integer NOT NULL,
+    id serial,
     name text NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS public.offered_services
 (
-    id integer NOT NULL,
+    id serial,
     service_id integer NOT NULL,
     external_servicer_id integer NOT NULL,
     PRIMARY KEY (id)
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS public.offered_services
 
 CREATE TABLE IF NOT EXISTS public.service_pricing
 (
-    id integer NOT NULL,
+    id serial,
     offered_service_id integer NOT NULL,
     price double precision NOT NULL,
     start_date date NOT NULL,
@@ -279,34 +279,34 @@ VALUES
     (3, 'Elektrykopol');
 
 INSERT INTO 
-    public.offered_services (id, service_id, external_servicer_id)
+    public.offered_services (service_id, external_servicer_id)
 VALUES
-    (1, 1, 1),
-    (2, 2, 2),
-    (3, 3, 3);
+    (1, 1),
+    (2, 2),
+    (3, 3);
     
 INSERT INTO 
-    public.service_pricing ( id, offered_service_id, price, start_date, end_date)
+    public.service_pricing ( offered_service_id, price, start_date, end_date)
 VALUES
-    (1, 1, 10, '1996-12-02', null),
-    (2, 2, 20, '1996-12-02', null),
-    (3, 3, 30, '1996-12-02', null);
+    (1, 10, '1996-12-02', null),
+    (2, 20, '1996-12-02', null),
+    (3, 30, '1996-12-02', null);
 
 INSERT INTO 
-    public.equipments ( id, name, description)
+    public.equipments ( name, description)
 VALUES
-    (1, 'gasnica', 'gasi'),
-    (2, 'kabel holowniczy', 'holuje'),
-    (3, 'dzik', 'jest dziki');
+    ('gasnica', 'gasi'),
+    ('kabel holowniczy', 'holuje'),
+    ('dzik', 'jest dziki');
 
 INSERT INTO 
-    public.vechicles (id, brand, model, vin, engine_capacity, engine_power)
+    public.vechicles ( brand, model, vin, engine_capacity, engine_power)
 VALUES
-    (1, 'subaru', 'impreza', 'JF1GD70625L518106', 1.9, 130),
-    (2, 'bmw', 'e36', 'JF1GD70625L518106', 1.9, 130),
-    (3, 'audi', 'a6', 'JF1GD70625L518106', 1.9, 130),
-    (4, 'audi', 'a4', 'JF1GD70625L518106', 1.9, 130),
-    (5, 'audi', 'a3', 'JF1GD70625L518106', 1.9, 130);
+    ('subaru', 'impreza', 'JF1GD70625L518106', 1.9, 130),
+    ('bmw', 'e36', 'JF1GD70625L518106', 1.9, 130),
+    ('audi', 'a6', 'JF1GD70625L518106', 1.9, 130),
+    ('audi', 'a4', 'JF1GD70625L518106', 1.9, 130),
+    ('audi', 'a3', 'JF1GD70625L518106', 1.9, 130);
 
 
 INSERT INTO 
@@ -321,13 +321,13 @@ VALUES
     (5, 3, 1);
 
 INSERT INTO 
-    public.vechicles_cares (id, vechicle_id, worker_id, start_date, end_date)
+    public.vechicles_cares ( vechicle_id, worker_id, start_date, end_date)
 VALUES
-    (1, 1, 2, '2020-12-02', null),
-    (2, 2, 2, '2020-12-02', null),
-    (3, 3, 3, '2020-12-02', '2023-12-02'),
-    (4, 4, 3, '2020-12-02', '2021-12-02'),
-    (5, 5, 3, '2020-12-02', null);
+    (1, 2, '2020-12-02', null),
+    (2, 2, '2020-12-02', null),
+    (3, 3, '2020-12-02', '2023-12-02'),
+    (4, 3, '2020-12-02', '2021-12-02'),
+    (5, 3, '2020-12-02', null);
 
 COMMIT;
 

@@ -34,7 +34,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("car_absenses");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Description).HasColumnName("description");
@@ -57,7 +57,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("equipments");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Description)
@@ -74,7 +74,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("external_servicers");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Name)
@@ -87,7 +87,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("offered_services");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.ExternalServicerId).HasColumnName("external_servicer_id");
@@ -115,7 +115,7 @@ namespace VehiclesAPI.Models
                     .IsUnique();
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Date).HasColumnName("date");
@@ -140,7 +140,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("reservations");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.DateFrom).HasColumnName("date_from");
@@ -171,7 +171,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("services");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Name)
@@ -184,7 +184,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("service_executions");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Description).HasColumnName("description");
@@ -219,7 +219,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("service_pricing");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
@@ -242,7 +242,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("vechicles");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Brand)
@@ -300,7 +300,7 @@ namespace VehiclesAPI.Models
                     .IsUnique();
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.Date).HasColumnName("date");
@@ -325,7 +325,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("vechicles_cares");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.EndDate).HasColumnName("end_date");
@@ -354,7 +354,7 @@ namespace VehiclesAPI.Models
                 entity.ToTable("workers");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.FirstName)
