@@ -7,15 +7,15 @@
     "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.8.8",
     "@mui/icons-material": "^5.6.1",
-    "@mui/material": "^5.6.1",
+    "@mui/material": "^5.6.4",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.1",
-    "@types/node": "^12.20.48",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.0",
+    "@types/react-leaflet": "^2.8.2",
     "@types/react-redux": "^7.1.24",
     "axios": "^0.27.2",
     "react": "^18.2.0-next-9f80a48ad-20220427",
@@ -49,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^12.20.50"
   }
 }

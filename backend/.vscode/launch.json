@@ -13,7 +13,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/VechiclesAPI/bin/Debug/net6.0/VechiclesAPI.dll",
+            "program": "${workspaceFolder}/VechiclesAPI/bin/Debug/net6.0.4/VechiclesAPI.dll",
             "args": [],
             "cwd": "${workspaceFolder}/VechiclesAPI",
             "stopAtEntry": false,
