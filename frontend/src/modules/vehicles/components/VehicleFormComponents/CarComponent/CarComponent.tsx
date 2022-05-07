@@ -1,28 +1,31 @@
-import React from "react";
-import {handleSubmit, handleChange} from './CarComponent.utils';
+import { TextField } from "shared/components";
+import { VehiclesFormFields } from "../../../pages/VehiclesForm";
 
-var BrandValue: string, ModelValue: string, VINValue: string;
-
-
-const CarComponent = () =>(
-    const {
-        handleSubmit,
-        handleChange
-    } = useCarHandle();
-);
-
-return(
-    <form onSubmit={handleSubmit}>
-    <label>Car</label>
-    <select value={BrandValue} placeholder={'Brand'} onChange={handleChange}>
-        <option value={"Audi"}>Audi</option>
-        <option value={"BMW"}>BMW</option>
-        <option value={"Opel"}>Opel</option>
-    </select>
-    <input type="text" value={ModelValue} placeholder={'Model'}/>
-    <input type="text" value={VINValue} placeholder={'VIN'}/>
-    
-  </form>
-)
+const CarComponent = () => {
+  return (
+    <>
+      <TextField
+        name={VehiclesFormFields.Brand}
+        placeholder="Brand"
+        label="Brand"
+      />
+      <TextField
+        name={VehiclesFormFields.Model}
+        placeholder="Model"
+        label="Model"
+      />
+      <TextField
+        name={VehiclesFormFields.EngineCapacity}
+        placeholder="EngineCapacity"
+        label="EngineCapacity"
+      />
+      <TextField
+        name={VehiclesFormFields.EnginePower}
+        placeholder="EnginePower"
+        label="EnginePower"
+      />
+    </>
+  );
+};
 
 export default CarComponent;
