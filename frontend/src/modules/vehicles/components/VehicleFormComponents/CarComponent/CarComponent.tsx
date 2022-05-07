@@ -14,6 +14,7 @@ const CarComponent = () => {
         placeholder="Model"
         label="Model"
       />
+      <TextField name={VehiclesFormFields.Vin} placeholder="Vin" label="Vin" />
       <TextField
         name={VehiclesFormFields.EngineCapacity}
         placeholder="EngineCapacity"

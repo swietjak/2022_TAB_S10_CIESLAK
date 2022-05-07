@@ -1,3 +1,5 @@
+import { FieldValue } from "./types";
+
 export const reservationsMock = [
   {
     reservationId: 1,
@@ -18,4 +20,10 @@ export const reservationsMock = [
     carName: "paseratti",
     description: "xddd",
   },
+];
+
+export const equipmentsOptionsMock: FieldValue[] = [
+  { value: 1, label: "test1" },
+  { value: 2, label: "test2" },
+  { value: 3, label: "test3" },
 ];
