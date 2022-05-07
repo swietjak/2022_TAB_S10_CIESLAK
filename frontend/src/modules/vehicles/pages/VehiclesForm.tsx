@@ -1,11 +1,15 @@
 import React from "react";
+import { CarComponent } from "../components/VehicleFormComponents/CarComponent";
+import { EquipmentComponent } from "../components/VehicleFormComponents/EquipmentComponent";
 
 type VehiclesFormProps = {};
 
+
 const VehiclesForm = (props: VehiclesFormProps) => (
   <>
-    <h1>hello from form</h1>
-    <div>List</div>
+    
+    <CarComponent/>
+    <EquipmentComponent></EquipmentComponent>
   </>
 );
 
