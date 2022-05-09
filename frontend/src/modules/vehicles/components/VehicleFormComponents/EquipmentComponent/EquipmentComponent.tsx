@@ -1,11 +1,11 @@
-import { Grid } from "@mui/material";
-import { PageWrapper } from "modules/vehicles/pages/VehiclesForm/ViehiclesForm.styles";
+import { Button, Grid, Typography } from "@mui/material";
+import { PageWrapper } from "modules/vehicles/pages/VehiclesForm/VehiclesForm.styles";
 import React from "react";
+import { useCallback } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Select, TextField } from "shared/components";
 import { equipmentsOptionsMock } from "shared/mocks";
 import { VehiclesFormFields } from "../../../pages/VehiclesForm";
-
 
 const EquipmentComponent = () => {
   const { control } = useFormContext();
@@ -26,30 +26,49 @@ const EquipmentComponent = () => {
     control,
     name: VehiclesFormFields.EquipmentQuantities,
   });
+
+  const addEq = useCallback(() => {
+    appendQuantity(0);
+    appendName({});
+  }, [appendName, appendQuantity]);
   return (
-    <PageWrapper>
-    <Grid container>
-      <label>Equipment</label>
+    <PageWrapper item container direction="column" xs={6} spacing={2}>
+      <Grid item>
+        <Typography>Equipment</Typography>
+      </Grid>
       {quantitiesFields.map((_, i) => (
-        <Grid item key={`grid-${i}`}>
-          <Select
-            options={equipmentsOptionsMock}
-            placeholder="Eq name"
-            key={`name-${i}`}
-            name={`${VehiclesFormFields.EquipmentNames}[${i}]`}
-          />
-          <TextField
-            type="number"
-            placeholder="Eq quantity"
-            key={`quantity-${i}`}
-            name={`${VehiclesFormFields.EquipmentQuantities}[${i}]`}
-          />
+        <Grid
+          item
+          container
+          key={`grid-${i}`}
+          alignItems="flex-start"
+          spacing={2}
+        >
+          <Grid item>
+            <Select
+              options={equipmentsOptionsMock}
+              placeholder="Eq name"
+              key={`name-${i}`}
+              name={`${VehiclesFormFields.EquipmentNames}[${i}]`}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              type="number"
+              placeholder="Eq quantity"
+              key={`quantity-${i}`}
+              name={`${VehiclesFormFields.EquipmentQuantities}[${i}]`}
+            />
+          </Grid>
         </Grid>
       ))}
-    </Grid>
+      <Grid item>
+        <Button type="button" variant="outlined" onClick={addEq}>
+          +
+        </Button>
+      </Grid>
     </PageWrapper>
   );
 };
 
 export default EquipmentComponent;
-

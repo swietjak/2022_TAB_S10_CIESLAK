@@ -9,7 +9,7 @@ class Vehicles extends Api {
   };
 
   public createVehicle = async (params: CreateVehicleParams) => {
-    const { data } = await this.api.post<string>("/Vehicle", { params });
+    const { data } = await this.api.post<string>("/Vehicle", params);
     return data;
   };
 }

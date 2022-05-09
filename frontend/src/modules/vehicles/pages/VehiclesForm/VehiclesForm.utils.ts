@@ -6,7 +6,6 @@ import { object, SchemaOf, string, number, array, mixed } from "yup";
 
 import { actions } from "../../store";
 
-
 export enum VehiclesFormFields {
   Brand = "brand",
   Model = "model",
@@ -15,7 +14,7 @@ export enum VehiclesFormFields {
   Vin = "vin",
   EquipmentNames = "equipmentsName",
   EquipmentQuantities = "equipmentsQuantities",
-  Equipments = "Equipments"
+  Equipments = "Equipments",
 }
 
 export interface VehiclesFormValues {
@@ -45,8 +44,12 @@ export const validationSchema: SchemaOf<VehiclesFormValues> = object()
     [VehiclesFormFields.Vin]: string().required("JESTEM WYMAGANY"),
     [VehiclesFormFields.EngineCapacity]: number(),
     [VehiclesFormFields.EnginePower]: number(),
-    [VehiclesFormFields.EquipmentQuantities]: array().of(string()),
-    [VehiclesFormFields.EquipmentNames]: array().of(mixed()),
+    [VehiclesFormFields.EquipmentQuantities]: array().of(
+      number().required("JESTEM WYMAGANY")
+    ),
+    [VehiclesFormFields.EquipmentNames]: array().of(
+      mixed().required("JESTEM WYMAGANY")
+    ),
   })
   .required();
 

@@ -1,35 +1,49 @@
-import { PageWrapper } from "modules/vehicles/pages/VehiclesForm/ViehiclesForm.styles";
+import { Grid } from "@mui/material";
+import { PageWrapper } from "../../../pages/VehiclesForm";
 import { TextField } from "shared/components";
 import { VehiclesFormFields } from "../../../pages/VehiclesForm";
 import { Textlabel } from "./CarComponent.styles";
 
-
 const CarComponent = () => {
   return (
-    <PageWrapper container spacing={-10}>
+    <PageWrapper direction="column" item container spacing={2} xs={6}>
       <Textlabel>Car</Textlabel>
-      <TextField
-        name={VehiclesFormFields.Brand}
-        placeholder="Brand"
-        label="Brand"
-      />
-      <TextField
-        name={VehiclesFormFields.Model}
-        placeholder="Model"
-        label="Model"
-      />
-      <TextField name={VehiclesFormFields.Vin} placeholder="Vin" label="Vin" />
+      <Grid item>
+        <TextField
+          name={VehiclesFormFields.Brand}
+          placeholder="Brand"
+          label="Brand"
+        />
+      </Grid>
+      <Grid item>
+        <TextField
+          name={VehiclesFormFields.Model}
+          placeholder="Model"
+          label="Model"
+        />
+      </Grid>
+      <Grid item>
+        <TextField
+          name={VehiclesFormFields.Vin}
+          placeholder="Vin"
+          label="Vin"
+        />
+      </Grid>
       <Textlabel>Engine</Textlabel>
-      <TextField
-        name={VehiclesFormFields.EngineCapacity}
-        placeholder="EngineCapacity"
-        label="EngineCapacity"
-      />
-      <TextField
-        name={VehiclesFormFields.EnginePower}
-        placeholder="EnginePower"
-        label="EnginePower"
-      />
+      <Grid item>
+        <TextField
+          name={VehiclesFormFields.EngineCapacity}
+          placeholder="EngineCapacity"
+          label="EngineCapacity"
+        />
+      </Grid>
+      <Grid item>
+        <TextField
+          name={VehiclesFormFields.EnginePower}
+          placeholder="EnginePower"
+          label="EnginePower"
+        />
+      </Grid>
     </PageWrapper>
   );
 };
