@@ -2,7 +2,6 @@ import { Grid, CircularProgress } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LoadingStatus } from "shared/types";
-import { ReservationsTableRow } from "../components";
 import { actions, selectors } from "../store";
 
 const ReservationsTable = () => {

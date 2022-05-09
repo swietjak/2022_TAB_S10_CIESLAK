@@ -6,6 +6,7 @@ import { object, SchemaOf, string, number, array, mixed } from "yup";
 
 import { actions } from "../../store";
 
+
 export enum VehiclesFormFields {
   Brand = "brand",
   Model = "model",
@@ -14,6 +15,7 @@ export enum VehiclesFormFields {
   Vin = "vin",
   EquipmentNames = "equipmentsName",
   EquipmentQuantities = "equipmentsQuantities",
+  Equipments = "Equipments"
 }
 
 export interface VehiclesFormValues {

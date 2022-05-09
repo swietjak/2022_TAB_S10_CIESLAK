@@ -1,9 +1,11 @@
 import { Grid } from "@mui/material";
+import { PageWrapper } from "modules/vehicles/pages/VehiclesForm/ViehiclesForm.styles";
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Select, TextField } from "shared/components";
 import { equipmentsOptionsMock } from "shared/mocks";
 import { VehiclesFormFields } from "../../../pages/VehiclesForm";
+
 
 const EquipmentComponent = () => {
   const { control } = useFormContext();
@@ -25,7 +27,9 @@ const EquipmentComponent = () => {
     name: VehiclesFormFields.EquipmentQuantities,
   });
   return (
+    <PageWrapper>
     <Grid container>
+      <label>Equipment</label>
       {quantitiesFields.map((_, i) => (
         <Grid item key={`grid-${i}`}>
           <Select
@@ -43,7 +47,9 @@ const EquipmentComponent = () => {
         </Grid>
       ))}
     </Grid>
+    </PageWrapper>
   );
 };
 
 export default EquipmentComponent;
+

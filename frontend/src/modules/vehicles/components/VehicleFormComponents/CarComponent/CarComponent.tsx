@@ -1,9 +1,13 @@
+import { PageWrapper } from "modules/vehicles/pages/VehiclesForm/ViehiclesForm.styles";
 import { TextField } from "shared/components";
 import { VehiclesFormFields } from "../../../pages/VehiclesForm";
+import { Textlabel } from "./CarComponent.styles";
+
 
 const CarComponent = () => {
   return (
-    <>
+    <PageWrapper container spacing={-10}>
+      <Textlabel>Car</Textlabel>
       <TextField
         name={VehiclesFormFields.Brand}
         placeholder="Brand"
@@ -15,6 +19,7 @@ const CarComponent = () => {
         label="Model"
       />
       <TextField name={VehiclesFormFields.Vin} placeholder="Vin" label="Vin" />
+      <Textlabel>Engine</Textlabel>
       <TextField
         name={VehiclesFormFields.EngineCapacity}
         placeholder="EngineCapacity"
@@ -25,7 +30,7 @@ const CarComponent = () => {
         placeholder="EnginePower"
         label="EnginePower"
       />
-    </>
+    </PageWrapper>
   );
 };
 
