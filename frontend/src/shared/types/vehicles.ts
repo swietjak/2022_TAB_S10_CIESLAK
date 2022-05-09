@@ -5,3 +5,8 @@ export interface Vehicle {
   model: string;
   equipments: string[];
 }
+
+export interface Equipment {
+  id: number;
+  amount: number;
+}
