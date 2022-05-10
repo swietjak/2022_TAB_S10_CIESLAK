@@ -45,7 +45,8 @@ namespace VehiclesAPI.Controllers
         {
             DateOnly start = DateOnly.FromDateTime(startDate);
             DateOnly end = DateOnly.FromDateTime(endDate);
-            var reservations = GetAllReservations(start, end);
+            var reservations = GetAllCurrentReservations(start, end);
+            var services = GetAllCurrentServices(start, end);
             return (
                 from v in context.Vehicles
                 select new GetVehiclesDto {
@@ -63,14 +64,23 @@ namespace VehiclesAPI.Controllers
                 } ).OrderBy(v => v.brand)
                 .Where(v => v.brand.Contains(string.IsNullOrEmpty(brand) ? "" : brand))
                 .Where(v =>!reservations.Contains(v.id))
+                .Where(v =>!services.Contains(v.id))
                 .ToList();
         }
 
-        private IEnumerable<int> GetAllReservations(DateOnly startDate, DateOnly endDate){
+        private IEnumerable<int> GetAllCurrentReservations(DateOnly startDate, DateOnly endDate){
             return (
                 from r in context.Reservations
                 where r.DateTo >= startDate && r.DateFrom <= endDate
                 select r.VehicleId
+            ).ToList().Distinct();
+        }
+
+        private IEnumerable<int> GetAllCurrentServices(DateOnly startDate, DateOnly endDate){
+            return (
+                from s in context.ServiceExecutions
+                where s.EndDate >= startDate && s.StartDate <= endDate
+                select s.VehicleId
             ).ToList().Distinct();
         }
  
