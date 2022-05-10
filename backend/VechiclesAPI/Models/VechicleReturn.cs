@@ -6,7 +6,7 @@ namespace VehiclesAPI.Models
     public partial class VehicleReturn
     {
         public int Id { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public string Description { get; set; }
         public int MeterIndication { get; set; }
         public double FuelConsumption { get; set; }
