@@ -18,28 +18,27 @@ namespace VehiclesAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] CreateReservationDto value)
         {
-            Reservation newReservation = new Reservation();
-            newReservation.Id=this.context.Reservations.Count()+1;
-   
-            newReservation.DateFrom=value.DateFrom;
-            newReservation.DateTo=value.DateTo;
-               
-            if(this.context.Workers.FirstOrDefault(existingUser => existingUser.Id.Equals(value.WorkerId))!=null)
+            Reservation newReservation = new Reservation{DateFrom=value.DateFrom,
+            DateTo=value.DateTo,
+            Description=value.Description
+            };
+            
+            var existingUser = this.context.Workers.FirstOrDefault(existingUser => existingUser.Id.Equals(value.WorkerId));
+            if(existingUser!=null)
             {
                 newReservation.WorkerId=value.WorkerId;
+            }else{
+                return StatusCode(400, "Worker with this ID doesn't exist");
             }
-            if(this.context.Vehicles.FirstOrDefault(existingVehicle => existingVehicle.Id.Equals(value.VehicleId))!=null)
+
+            var existingVehicle = this.context.Vehicles.FirstOrDefault(existingVehicle => existingVehicle.Id.Equals(value.VehicleId));
+            if(existingVehicle!=null)
             {
                 newReservation.VehicleId=value.VehicleId;
+            }else{
+                return StatusCode(400, "Vehicle with this ID doesn't exist");
             }
-            if(value.Description!=null)
-            {
-                newReservation.Description=value.Description;
-            }
-            else
-            {
-                newReservation.Description="none";
-            }
+            
             this.context.Reservations.Add(newReservation);
             try
             {

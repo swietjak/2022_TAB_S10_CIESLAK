@@ -18,24 +18,17 @@ namespace VehiclesAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] CreateRentalDto value)
         {
-            Rental newRental = new Rental();
-            newRental.Id=this.context.Rentals.Count()+1;
-            newRental.Date=value.Date;
-            newRental.Description=value.Description;
+            Rental newRental = new Rental{Date=value.Date,
+            Description=value.Description,
+            MeterIndication=value.MeterIndication
+            };
             
-            if(this.context.Reservations.FirstOrDefault(existingReservation => existingReservation.Id.Equals(value.ReservationId))!=null)
+            var existingReservation = this.context.Reservations.FirstOrDefault(existingReservation => existingReservation.Id.Equals(value.ReservationId));
+            if(existingReservation!=null)
             {
                 newRental.ReservationId=value.ReservationId;
-            }
-
-            newRental.MeterIndication=value.MeterIndication;
-
-            if(value.VehicleReturnId.HasValue)
-            {
-                newRental.VehicleReturnId=value.VehicleReturnId;
-            }
-            else{
-                newRental.VehicleReturnId=null;
+            }else{
+                return StatusCode(400,"Rental with that reservation ID doesn't exist");
             }
 
             this.context.Rentals.Add(newRental);
@@ -62,13 +55,6 @@ namespace VehiclesAPI.Controllers
 
             existingRental.MeterIndication=value.MeterIndication;
 
-            if(value.VehicleReturnId.HasValue)
-            {
-                existingRental.VehicleReturnId=value.VehicleReturnId;
-            }
-            else{
-                existingRental.VehicleReturnId=null;
-            }
             try{
                 await this.context.SaveChangesAsync();
                 return StatusCode(201,"Rental updated");

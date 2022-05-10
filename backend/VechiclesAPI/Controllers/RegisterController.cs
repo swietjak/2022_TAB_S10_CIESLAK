@@ -23,13 +23,12 @@ namespace VehiclesAPI.Controllers
             var existingUser = this.context.Workers.FirstOrDefault(existingUser => existingUser.Email.Equals(value.Email));
             if(existingUser==null)
             {
-                Worker newWorker = new Worker();
-                newWorker.Id=this.context.Workers.Count();
-                newWorker.Email=value.Email;
-                newWorker.FirstName=value.FirstName;
-                newWorker.Surname=value.LastName;
-                newWorker.Password=value.Password;
-                newWorker.Pesel=value.Pesel;
+                Worker newWorker = new Worker{Email=value.Email,
+                FirstName=value.FirstName,
+                Surname=value.LastName,
+                Password=value.Password,
+                Pesel=value.Pesel
+                };
 
                 if(value.Hascarepermissions.HasValue){
                     newWorker.Hascarepermissions=value.Hascarepermissions.HasValue;
