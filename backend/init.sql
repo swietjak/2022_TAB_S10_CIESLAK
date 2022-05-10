@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS public.vechicles
 CREATE TABLE IF NOT EXISTS public.reservations
 (
     id serial,
-    date_from date NOT NULL,
-    date_to date NOT NULL,
+    date_from timestamp NOT NULL,
+    date_to timestamp NOT NULL,
     worker_id integer NOT NULL,
     vechicle_id integer NOT NULL,
     description text,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.workers
 CREATE TABLE IF NOT EXISTS public.rentals
 (
     id serial,
-    date date NOT NULL,
+    date timestamp NOT NULL,
     description text,
     reservation_id integer NOT NULL,
     meter_indication integer NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS public.rentals
 CREATE TABLE IF NOT EXISTS public.vechicle_returns
 (
     id serial,
-    date date NOT NULL,
+    date timestamp NOT NULL,
     description text,
     meter_indication integer NOT NULL,
     fuel_consumption double precision NOT NULL,
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS public.vechicles_cares
     id serial,
     vechicle_id integer NOT NULL,
     worker_id integer NOT NULL,
-    start_date date NOT NULL,
-    end_date date,
+    start_date timestamp NOT NULL,
+    end_date timestamp,
     PRIMARY KEY (id)
 );
 
@@ -90,8 +90,8 @@ CREATE TABLE IF NOT EXISTS public.vechicle_equipment
 CREATE TABLE IF NOT EXISTS public.car_absenses
 (
     id serial,
-    start_date date NOT NULL,
-    end_date date NOT NULL,
+    start_date timestamp NOT NULL,
+    end_date timestamp NOT NULL,
     vechicle_id integer NOT NULL,
     description text,
     PRIMARY KEY (id)
@@ -108,8 +108,8 @@ CREATE TABLE IF NOT EXISTS public.service_executions
 (
     id serial,
     vechicle_id integer NOT NULL,
-    start_date date NOT NULL,
-    end_date date NOT NULL,
+    start_date timestamp NOT NULL,
+    end_date timestamp NOT NULL,
     description text,
     is_finished boolean NOT NULL,
     vechicle_care_id integer NOT NULL,
@@ -137,8 +137,8 @@ CREATE TABLE IF NOT EXISTS public.service_pricing
     id serial,
     offered_service_id integer NOT NULL,
     price double precision NOT NULL,
-    start_date date NOT NULL,
-    end_date date,
+    start_date timestamp NOT NULL,
+    end_date timestamp,
     PRIMARY KEY (id)
 );
 
@@ -330,11 +330,3 @@ VALUES
     (5, 3, '2020-12-02', null);
 
 COMMIT;
-
-
-
-
-
-
-
-

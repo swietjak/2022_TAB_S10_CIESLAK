@@ -1,10 +1,10 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { persistStore } from "redux-persist";
 import commonStore from "shared/store";
 import { reducers } from "modules";
 
 export const store = configureStore({
-  reducer: combineReducers({ ...reducers, common: commonStore.reducer }),
+  reducer: { ...reducers, common: commonStore.reducer },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,

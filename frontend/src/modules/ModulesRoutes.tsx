@@ -11,7 +11,7 @@ const ModalRoutes = () => {
       {routes.map((r, i) => (
         <Route key={`route-${i}`} path={r.path} element={<r.element />} />
       ))}
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<Navigate to={"/"} />} />
     </Routes>
   );
 };

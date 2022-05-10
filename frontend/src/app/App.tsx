@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "config";
 import { ModalRoutes } from "modules";
-import { Loader } from "shared/components";
+import { Loader, Topbar } from "shared/components";
 import { store } from "./App.store";
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
         <CssBaseline />
         <Suspense fallback={<Loader />}>
           <BrowserRouter>
-            <div>Test Topbar</div>
+            <Topbar />
             <ModalRoutes />
           </BrowserRouter>
         </Suspense>

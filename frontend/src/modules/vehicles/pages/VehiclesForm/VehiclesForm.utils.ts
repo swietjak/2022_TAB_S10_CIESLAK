@@ -65,10 +65,9 @@ export const useOnSubmit = () => {
   };
 };
 
-export const useVehiclesForm = () => {
-  return useForm<VehiclesFormValues>({
+export const useVehiclesForm = () =>
+  useForm<VehiclesFormValues>({
     defaultValues,
     resolver: yupResolver(validationSchema),
     reValidateMode: "onChange",
   });
-};
