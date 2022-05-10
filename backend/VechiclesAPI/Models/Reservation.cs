@@ -6,8 +6,8 @@ namespace VehiclesAPI.Models
     public partial class Reservation
     {
         public int Id { get; set; }
-        public DateOnly DateFrom { get; set; }
-        public DateOnly DateTo { get; set; }
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
         public int WorkerId { get; set; }
         public int VehicleId { get; set; }
         public string? Description { get; set; }

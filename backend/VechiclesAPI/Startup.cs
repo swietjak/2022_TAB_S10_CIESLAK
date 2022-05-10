@@ -45,6 +45,7 @@ namespace backend
             System.Console.WriteLine("Debug give me connectionString " + connectionString);
             services.AddDbContext<WorldContext>(
                 opts => opts.UseNpgsql(connectionString));
+                
 
         }
 

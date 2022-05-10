@@ -6,7 +6,7 @@ namespace VehiclesAPI.Models
     public partial class Rental
     {
         public int Id { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
         public string Description { get; set; }
         public int ReservationId { get; set; }
         public int MeterIndication { get; set; }
