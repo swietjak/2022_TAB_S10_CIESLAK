@@ -14,6 +14,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using VehiclesAPI.Models;
 
+using Microsoft.AspNetCore.Identity;
+
+
 namespace backend
 {
     public class Startup
@@ -41,8 +44,8 @@ namespace backend
             var connectionString = Configuration["DbContextSettings:ConnectionString"];
             System.Console.WriteLine("Debug give me connectionString " + connectionString);
             services.AddDbContext<WorldContext>(
-                opts => opts.UseNpgsql(connectionString)
-            );
+                opts => opts.UseNpgsql(connectionString));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
