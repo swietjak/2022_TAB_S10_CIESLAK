@@ -1,5 +1,5 @@
 const paths = {
-  login: "/",
+  login: "/login",
   hello: "/hello",
   reservationsTable: "/reservations-table",
   reservationSummary: "/reservation-summary/:reservationId/:myNumber",
