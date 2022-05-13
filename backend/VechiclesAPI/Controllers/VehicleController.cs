@@ -39,7 +39,7 @@ namespace VehiclesAPI.Controllers
                 .Where(v => v.brand.Contains(string.IsNullOrEmpty(brand) ? "" : brand))
                 .ToList();
         }
-        
+
         [HttpGet("available")]
         public IEnumerable<GetVehiclesDto> GetAvailableVehicles(string? brand, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
@@ -48,27 +48,29 @@ namespace VehiclesAPI.Controllers
             var absences = GetAllCurrentAbsence(startDate, endDate);
             return (
                 from v in context.Vehicles
-                select new GetVehiclesDto {
+                select new GetVehiclesDto
+                {
                     id = v.Id,
                     vin = v.Vin,
                     brand = v.Brand,
                     model = v.Model,
                     equipments = (
                         from i in context.VehicleEquipments
-                        join e in context.Equipments 
+                        join e in context.Equipments
                         on i.EquipmentId equals e.Id
-                        where i.VehicleId == v.Id 
+                        where i.VehicleId == v.Id
                         select e.Name
                         ).ToArray()
-                } ).OrderBy(v => v.brand)
+                }).OrderBy(v => v.brand)
                 .Where(v => v.brand.Contains(string.IsNullOrEmpty(brand) ? "" : brand))
-                .Where(v =>!reservations.Contains(v.id))
-                .Where(v =>!services.Contains(v.id))
-                .Where(v =>!absences.Contains(v.id))
+                .Where(v => !reservations.Contains(v.id))
+                .Where(v => !services.Contains(v.id))
+                .Where(v => !absences.Contains(v.id))
                 .ToList();
         }
 
-        private IEnumerable<int> GetAllCurrentReservations(DateTime startDate, DateTime endDate){
+        private IEnumerable<int> GetAllCurrentReservations(DateTime startDate, DateTime endDate)
+        {
             return (
                 from r in context.Reservations
                 where r.DateTo >= startDate && r.DateFrom <= endDate
@@ -76,15 +78,17 @@ namespace VehiclesAPI.Controllers
             ).ToList().Distinct();
         }
 
-        private IEnumerable<int> GetAllCurrentServices(DateTime startDate, DateTime endDate){
+        private IEnumerable<int> GetAllCurrentServices(DateTime startDate, DateTime endDate)
+        {
             return (
                 from s in context.ServiceExecutions
                 where s.EndDate >= startDate && s.StartDate <= endDate
                 select s.VehicleId
             ).ToList().Distinct();
         }
- 
-        private IEnumerable<int> GetAllCurrentAbsence(DateTime startDate, DateTime endDate){
+
+        private IEnumerable<int> GetAllCurrentAbsence(DateTime startDate, DateTime endDate)
+        {
             return (
                 from a in context.CarAbsenses
                 where a.EndDate >= startDate && a.StartDate <= endDate
