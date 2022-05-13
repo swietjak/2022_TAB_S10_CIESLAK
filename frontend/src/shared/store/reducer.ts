@@ -1,18 +1,18 @@
 import { createReducer } from "@reduxjs/toolkit";
 import resource, { Resource } from "shared/resource";
 import { LoadingStatus, UserData } from "shared/types";
-import { login } from "./actions";
+import { login, resetUserData } from "./actions";
 
 export interface State {
   loading: LoadingStatus;
   error?: string | null;
-  userData: Resource<UserData>;
+  userData: Resource<UserData | null>;
 }
 
 const initialState: State = {
   loading: LoadingStatus.Idle,
   error: null,
-  userData: resource.getInitial(),
+  userData: resource.getInitial(null),
 };
 
 export default createReducer(initialState, (builder) =>
@@ -25,5 +25,8 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(login.rejected, (state, action) => {
       resource.setFailed(state.userData, action.error.message);
+    })
+    .addCase(resetUserData, (state) => {
+      resource.reset(state.userData, null);
     })
 );
