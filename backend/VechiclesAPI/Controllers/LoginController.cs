@@ -19,29 +19,23 @@ namespace VehiclesAPI.Controllers
         public IActionResult Post([FromBody] LoginDto value)
         {
             var worker = this.context.Workers.FirstOrDefault(worker => worker.Email.Equals(value.login));
-            if(worker != null)
+            if (worker != null)
             {
-                if(!worker.Password.Equals(value.password))
+                if (!worker.Password.Equals(value.password))
                 {
                     return StatusCode(400, "Wrong password");
                 }
                 UserPermisions userPermisions = new UserPermisions();
-                if(worker.Isadmin.HasValue){
-                    userPermisions.isAdmin=worker.Isadmin.Value;
-                }else{
-                    userPermisions.isAdmin=false;
-                }
-                if(worker.Hascarepermissions.HasValue){
-                    userPermisions.hasCarePermissions=worker.Hascarepermissions.Value;
-                }else{
-                    userPermisions.hasCarePermissions=false;
-                }
-                
-                return StatusCode(201, new LoginResponseDto{userId=worker.Id,name=worker.FirstName,surname=worker.Surname,userPermisions=userPermisions});
-            }
-            return StatusCode(400,"User with that login doesn't exist");
 
-        } 
+                userPermisions.isAdmin = worker.Isadmin.HasValue && worker.Isadmin.Value;
+                userPermisions.hasCarePermissions = worker.Hascarepermissions.HasValue && worker.Hascarepermissions.Value;
+
+
+                return StatusCode(201, new LoginResponseDto { userId = worker.Id, name = worker.FirstName, surname = worker.Surname, userPermisions = userPermisions });
+            }
+            return StatusCode(400, "User with that login doesn't exist");
+
+        }
     }
 
 }

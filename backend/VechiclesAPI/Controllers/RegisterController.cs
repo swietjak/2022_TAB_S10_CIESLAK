@@ -21,42 +21,47 @@ namespace VehiclesAPI.Controllers
         public IActionResult Register([FromBody] RegisterDto value)
         {
             var existingUser = this.context.Workers.FirstOrDefault(existingUser => existingUser.Email.Equals(value.Email));
-            if(existingUser==null)
+            if (existingUser == null)
             {
-                Worker newWorker = new Worker();
-                newWorker.Id=this.context.Workers.Count();
-                newWorker.Email=value.Email;
-                newWorker.FirstName=value.FirstName;
-                newWorker.Surname=value.LastName;
-                newWorker.Password=value.Password;
-                newWorker.Pesel=value.Pesel;
+                Worker newWorker = new Worker
+                {
+                    Email = value.Email,
+                    FirstName = value.FirstName,
+                    Surname = value.LastName,
+                    Password = value.Password,
+                    Pesel = value.Pesel
+                };
 
-                if(value.Hascarepermissions.HasValue){
-                    newWorker.Hascarepermissions=value.Hascarepermissions.HasValue;
-                }else 
+                if (value.Hascarepermissions.HasValue)
                 {
-                    newWorker.Hascarepermissions=false;
+                    newWorker.Hascarepermissions = value.Hascarepermissions.HasValue;
                 }
-                if(value.Isadmin.HasValue){
-                   newWorker.Isadmin=value.Isadmin.HasValue;
-                }else 
+                else
                 {
-                   newWorker.Isadmin=false;
+                    newWorker.Hascarepermissions = false;
+                }
+                if (value.Isadmin.HasValue)
+                {
+                    newWorker.Isadmin = value.Isadmin.HasValue;
+                }
+                else
+                {
+                    newWorker.Isadmin = false;
                 }
                 this.context.Workers.Add(newWorker);
                 try
                 {
                     this.context.SaveChanges();
-                    return StatusCode(201,value);
+                    return StatusCode(201, value);
                 }
                 catch
                 {
-                    return StatusCode(400,"Failed registration");
+                    return StatusCode(400, "Failed registration");
                 }
             }
             else
             {
-                return StatusCode(400,"User with this e-mail already exists");
+                return StatusCode(400, "User with this e-mail already exists");
             }
         }
     }
