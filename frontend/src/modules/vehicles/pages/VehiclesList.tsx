@@ -5,11 +5,10 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import Vehicles from "shared/services/Vehicles";
+import { CarsTable } from "../components";
 import { actions } from "../store";
 
 type VehiclesListProps = {};
-
-const vehicles = new Vehicles();
 
 const VehiclesList = (props: VehiclesListProps) => {
   const navigate = useNavigate();
@@ -25,6 +24,7 @@ const VehiclesList = (props: VehiclesListProps) => {
       <Button onClick={() => dispatch(actions.getVehicles({ brand: "" }))}>
         New vehicle
       </Button>
+      <CarsTable />
     </>
   );
 };

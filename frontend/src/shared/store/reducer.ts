@@ -12,7 +12,15 @@ export interface State {
 const initialState: State = {
   loading: LoadingStatus.Idle,
   error: null,
-  userData: resource.getInitial(null),
+  userData: resource.getInitial({
+    name: "xd",
+    surname: "xd",
+    userPermisions: {
+      hasCarePermissions: true,
+      isAdmin: true,
+    },
+    userId: 12,
+  }),
 };
 
 export default createReducer(initialState, (builder) =>
