@@ -6,8 +6,10 @@ import { Textlabel } from "./CarComponent.styles";
 
 const CarComponent = () => {
   return (
-    <PageWrapper direction="column" item container spacing={2} xs={6}>
-      <Textlabel>Car</Textlabel>
+    <PageWrapper item container spacing={2} xs={6}>
+      <Grid xs={12}>
+        <Textlabel>Car</Textlabel>
+      </Grid>
       <Grid item>
         <TextField
           name={VehiclesFormFields.Brand}
@@ -29,19 +31,21 @@ const CarComponent = () => {
           label="Vin"
         />
       </Grid>
-      <Textlabel>Engine</Textlabel>
+      <Grid xs={12}>
+        <Textlabel>Engine</Textlabel>
+      </Grid>
       <Grid item>
         <TextField
           name={VehiclesFormFields.EngineCapacity}
           placeholder="EngineCapacity"
-          label="EngineCapacity"
+          label="Capacity"
         />
       </Grid>
       <Grid item>
         <TextField
           name={VehiclesFormFields.EnginePower}
           placeholder="EnginePower"
-          label="EnginePower"
+          label="Power"
         />
       </Grid>
     </PageWrapper>

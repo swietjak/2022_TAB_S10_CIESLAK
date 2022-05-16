@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import React from "react";
 import { FormProvider } from "react-hook-form";
 import { CarComponent } from "../../components/VehicleFormComponents/CarComponent";
@@ -14,13 +14,19 @@ const VehiclesForm = (props: VehiclesFormProps) => {
   return (
     <form onSubmit={formProps.handleSubmit(onSubmit)}>
       <FormProvider {...formProps}>
-        <CarContainer container>
+        <CarContainer justifyContent="center" container>
           <CarComponent />
           <EquipmentComponent />
+          <Grid xs={6}>
+            <Button
+              onSubmit={formProps.handleSubmit(onSubmit)}
+              variant="contained"
+              type="submit"
+            >
+              Submit
+            </Button>
+          </Grid>
         </CarContainer>
-        <Button onSubmit={formProps.handleSubmit(onSubmit)} type="submit">
-          Submit
-        </Button>
       </FormProvider>
     </form>
   );

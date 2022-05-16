@@ -39,16 +39,16 @@ export const defaultValues: VehiclesFormValues = {
 
 export const validationSchema: SchemaOf<VehiclesFormValues> = object()
   .shape({
-    [VehiclesFormFields.Brand]: string().required("JESTEM WYMAGANY"),
-    [VehiclesFormFields.Model]: string().required("JESTEM WYMAGANY"),
-    [VehiclesFormFields.Vin]: string().required("JESTEM WYMAGANY"),
+    [VehiclesFormFields.Brand]: string().required("REQUIRED"),
+    [VehiclesFormFields.Model]: string().required("REQUIRED"),
+    [VehiclesFormFields.Vin]: string().required("REQUIRED"),
     [VehiclesFormFields.EngineCapacity]: number(),
     [VehiclesFormFields.EnginePower]: number(),
     [VehiclesFormFields.EquipmentQuantities]: array().of(
-      number().required("JESTEM WYMAGANY")
+      number().required("REQUIRED")
     ),
     [VehiclesFormFields.EquipmentNames]: array().of(
-      mixed().required("JESTEM WYMAGANY")
+      mixed().required("REQUIRED")
     ),
   })
   .required();
