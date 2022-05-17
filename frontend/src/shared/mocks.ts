@@ -23,9 +23,9 @@ export const reservationsMock = [
 ];
 
 export const equipmentsOptionsMock: FieldValue[] = [
-  { value: 1, label: "test1" },
-  { value: 2, label: "test2" },
-  { value: 3, label: "test3" },
+  { value: 1, label: "gasnica" },
+  { value: 2, label: "kabel holowniczy" },
+  { value: 3, label: "dzik" },
 ];
 
 export const vehiclesMock: Vehicle[] = [

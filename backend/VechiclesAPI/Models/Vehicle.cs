@@ -20,6 +20,7 @@ namespace VehiclesAPI.Models
         public string Vin { get; set; }
         public double EngineCapacity { get; set; }
         public double EnginePower { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual ICollection<CarAbsense> CarAbsenses { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }

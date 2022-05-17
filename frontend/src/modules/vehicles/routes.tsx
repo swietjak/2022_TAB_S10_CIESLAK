@@ -1,5 +1,10 @@
 import { paths } from "config";
-import { VehiclesForm, VehiclesList } from "./pages";
+import {
+  VehiclesForm,
+  AdminVehiclesList,
+  CareTakerVehiclesList,
+  WorkerVehiclesList,
+} from "./pages";
 
 const routes = [
   {
@@ -7,8 +12,16 @@ const routes = [
     element: () => <VehiclesForm />,
   },
   {
-    path: paths.vehiclesList,
-    element: () => <VehiclesList />,
+    path: paths.adminVehiclesList,
+    element: () => <AdminVehiclesList />,
+  },
+  {
+    path: paths.careTakerVehiclesList,
+    element: () => <CareTakerVehiclesList />,
+  },
+  {
+    path: paths.workerVehiclesList,
+    element: () => <WorkerVehiclesList />,
   },
 ];
 

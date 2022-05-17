@@ -1,10 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Equipment, FieldValue } from "shared/types";
+import { useNavigate } from "react-router";
 import { object, SchemaOf, string, number, array, mixed } from "yup";
-
+import { Equipment, FieldValue } from "shared/types";
 import { actions } from "../../store";
+import { useCallback } from "react";
+import { paths } from "config";
 
 export enum VehiclesFormFields {
   Brand = "brand",
@@ -24,7 +26,7 @@ export interface VehiclesFormValues {
   [VehiclesFormFields.EngineCapacity]: number;
   [VehiclesFormFields.EnginePower]: number;
   [VehiclesFormFields.EquipmentQuantities]: number[];
-  [VehiclesFormFields.EquipmentNames]: FieldValue[];
+  [VehiclesFormFields.EquipmentNames]: number[];
 }
 
 export const defaultValues: VehiclesFormValues = {
@@ -42,8 +44,8 @@ export const validationSchema: SchemaOf<VehiclesFormValues> = object()
     [VehiclesFormFields.Brand]: string().required("REQUIRED"),
     [VehiclesFormFields.Model]: string().required("REQUIRED"),
     [VehiclesFormFields.Vin]: string().required("REQUIRED"),
-    [VehiclesFormFields.EngineCapacity]: number(),
-    [VehiclesFormFields.EnginePower]: number(),
+    [VehiclesFormFields.EngineCapacity]: number().required("REQUIRED"),
+    [VehiclesFormFields.EnginePower]: number().required("REQUIRED"),
     [VehiclesFormFields.EquipmentQuantities]: array().of(
       number().required("REQUIRED")
     ),
@@ -55,13 +57,24 @@ export const validationSchema: SchemaOf<VehiclesFormValues> = object()
 
 export const useOnSubmit = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onSuccess = useCallback(() => {
+    navigate(paths.adminVehiclesList);
+  }, [navigate]);
+
   return (values: VehiclesFormValues) => {
     const { equipmentsName, equipmentsQuantities, ...createParams } = values;
     const equipments: Equipment[] = equipmentsName.map((eqName, i) => ({
-      id: eqName.value,
+      id: eqName,
       amount: equipmentsQuantities[i],
     }));
-    dispatch(actions.createVehicle({ equipments, ...createParams }));
+    dispatch(
+      actions.createVehicle({
+        onSuccess,
+        params: { equipments, ...createParams },
+      })
+    );
   };
 };
 

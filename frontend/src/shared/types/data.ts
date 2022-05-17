@@ -12,3 +12,13 @@ export interface UserData {
     isAdmin: boolean;
   };
 }
+
+export interface ActionSideEffects {
+  onSuccess?: () => void;
+  onFailure?: () => void;
+}
+
+export interface Column<T> {
+  label: string;
+  renderData: (data: T) => JSX.Element | string;
+}

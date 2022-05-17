@@ -264,6 +264,9 @@ namespace VehiclesAPI.Models
                 entity.Property(e => e.EnginePower)
                     .IsRequired()
                     .HasColumnName("engine_power");
+
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("is_deleted");
             });
 
             modelBuilder.Entity<VehicleEquipment>(entity =>
@@ -379,6 +382,9 @@ namespace VehiclesAPI.Models
                     .HasColumnName("surname");
 
                 entity.Property(e => e.Email).HasColumnName("email");
+
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("is_deleted");
             });
 
             OnModelCreatingPartial(modelBuilder);

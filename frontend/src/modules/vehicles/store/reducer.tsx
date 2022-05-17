@@ -1,14 +1,14 @@
 import { createReducer } from "@reduxjs/toolkit";
 import resource, { Resource } from "shared/resource";
 import { LoadingStatus, Vehicle } from "shared/types";
-import { UserReservation } from "shared/types/reservations";
-import { createVehicle, getVehicles } from "./actions";
+import { createVehicle, deleteVehicle, getVehicles } from "./actions";
 
 export interface State {
   loading: LoadingStatus;
   error?: string | null;
   getVehicles: Resource<Vehicle[]>;
   createVehicle: Resource<string>;
+  deleteVehicle: Resource<string>;
 }
 
 const initialState: State = {
@@ -16,6 +16,7 @@ const initialState: State = {
   error: null,
   getVehicles: resource.getInitial([]),
   createVehicle: resource.getInitial(""),
+  deleteVehicle: resource.getInitial(""),
 };
 
 export default createReducer(initialState, (builder) =>
@@ -37,5 +38,14 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(createVehicle.rejected, (state, action) => {
       resource.setFailed(state.createVehicle, action.error.message);
+    })
+    .addCase(deleteVehicle.pending, (state) => {
+      resource.setPending(state.deleteVehicle);
+    })
+    .addCase(deleteVehicle.fulfilled, (state, action) => {
+      resource.setSucceeded(state.deleteVehicle, action.payload);
+    })
+    .addCase(deleteVehicle.rejected, (state, action) => {
+      resource.setFailed(state.deleteVehicle, action.error.message);
     })
 );
