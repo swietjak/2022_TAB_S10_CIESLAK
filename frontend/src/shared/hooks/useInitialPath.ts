@@ -6,5 +6,8 @@ export const useInitialPath = () => {
   const { data } = useSelector(selectors.getUserDataResource);
 
   if (!data) return paths.login;
-  return paths.vehiclesList; //TODO: when other pages are ready add paths for other permissions
+  if (data.userPermisions.isAdmin) return paths.adminVehiclesList;
+  if (data.userPermisions.hasCarePermissions)
+    return paths.careTakerVehiclesList;
+  return paths.workerVehiclesList;
 };

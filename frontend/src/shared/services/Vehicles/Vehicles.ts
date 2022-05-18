@@ -12,6 +12,11 @@ class Vehicles extends Api {
     const { data } = await this.api.post<string>("/Vehicle", params);
     return data;
   };
+
+  public deleteVehicle = async (vehicleId: number) => {
+    const { data } = await this.api.delete<string>(`/Vehicle/${vehicleId}`);
+    return data;
+  };
 }
 
 export default Vehicles;

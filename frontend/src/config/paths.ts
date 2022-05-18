@@ -3,8 +3,10 @@ const paths = {
   hello: "/hello",
   reservationsTable: "/reservations-table",
   reservationSummary: "/reservation-summary/:reservationId/:myNumber",
-  vehiclesList: "/vehicles",
-  vehiclesForm: "/vehicles/new",
+  adminVehiclesList: "/admin-vehicles-list",
+  careTakerVehiclesList: "/care-taker-vehicles-list",
+  workerVehiclesList: "/worker-vehicles-list",
+  vehiclesForm: "/admin-vehicles-list/new",
   goodbye: "/goodbye",
 };
 

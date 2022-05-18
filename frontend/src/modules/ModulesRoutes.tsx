@@ -10,10 +10,11 @@ const routes = [...reservationsRoutes, ...helloRoutes, ...vehiclesRoutes];
 
 const ModalRoutes = () => {
   const initialPath = useInitialPath();
-  const { userId } = useUserData();
+  const { userId, hasCarePermissions } = useUserData();
   const navigate = useNavigate();
   useEffect(() => {
     if (!userId) return navigate(paths.login);
+    console.log(userId, hasCarePermissions);
     return navigate(initialPath);
   }, [initialPath, userId]); //eslint-disable-line
 

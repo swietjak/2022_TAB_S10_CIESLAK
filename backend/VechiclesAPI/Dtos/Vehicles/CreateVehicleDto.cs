@@ -11,7 +11,7 @@ namespace VehiclesAPI.Dtos
         public string brand { get; set; }
         public string model { get; set; }
         public int enginePower { get; set; }
-        public int engineCapacity { get; set; }
+        public double engineCapacity { get; set; }
         public NewEquipmentEntry[] equipments { get; set; }
     }
 }

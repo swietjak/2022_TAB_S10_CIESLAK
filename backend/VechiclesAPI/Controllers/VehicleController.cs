@@ -18,10 +18,11 @@ namespace VehiclesAPI.Controllers
 
 
         [HttpGet(Name = "GetVehicles")]
-        public IEnumerable<GetVehiclesDto> GetVehicles(string? brand)
+        public IEnumerable<GetVehiclesDto> GetVehicles(string? brand, bool? showDeleted)
         {
             return (
                 from v in context.Vehicles
+                where !v.IsDeleted
                 select new GetVehiclesDto
                 {
                     id = v.Id,
@@ -35,7 +36,8 @@ namespace VehiclesAPI.Controllers
                         where i.VehicleId == v.Id
                         select e.Name
                         ).ToArray()
-                }).OrderBy(v => v.brand)
+                }
+                ).OrderBy(v => v.brand)
                 .Where(v => v.brand.Contains(string.IsNullOrEmpty(brand) ? "" : brand))
                 .ToList();
         }
@@ -122,23 +124,35 @@ namespace VehiclesAPI.Controllers
         public IActionResult CreateVehicle([FromBody] CreateVehicleDto value)
         {
             var newVehicle = value.AsVehicle();
-            try
-            {
-                this.context.Vehicles.Add(newVehicle);
-                this.context.SaveChanges();
-            }
-            catch (System.Exception)
-            {
-                return StatusCode(400, newVehicle.Id);
-            }
+            this.context.Vehicles.Add(newVehicle);
 
             var vehicleEquipmentList = value.equipments.Select(e => new VehicleEquipment { Amount = e.amount, EquipmentId = e.id, VehicleId = newVehicle.Id });
 
             try
             {
-                this.context.VehicleEquipments.AddRange();
+                this.context.VehicleEquipments.AddRange(vehicleEquipmentList);
                 this.context.SaveChanges();
                 return StatusCode(201, newVehicle.Id);
+            }
+            catch (System.Exception e)
+            {
+                return StatusCode(400, e.StackTrace);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVehicle(int id)
+        {
+            var existingVehicle = this.context.Vehicles.FirstOrDefault(vehicle => vehicle.Id == id);
+
+            if (existingVehicle == null) return StatusCode(400, "No such vehicle found");
+
+            existingVehicle.IsDeleted = true;
+
+            try
+            {
+                await this.context.SaveChangesAsync();
+                return StatusCode(201);
             }
             catch (System.Exception)
             {

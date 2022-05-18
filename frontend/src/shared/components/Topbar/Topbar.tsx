@@ -1,4 +1,4 @@
-import AccessibleForwardIcon from "@mui/icons-material/AccessibleForward";
+import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { actions } from "shared/store";
@@ -9,7 +9,7 @@ const Topbar = () => {
   return (
     <TopbarContainer>
       <LogoWrapper>
-        <AccessibleForwardIcon fontSize="large" />
+        <DirectionsCarFilledIcon fontSize="large" />
         <Typography variant="h6">Cars & stuff</Typography>
       </LogoWrapper>
       <LogoutWrapper onClick={() => dispatch(actions.resetUserData())}>

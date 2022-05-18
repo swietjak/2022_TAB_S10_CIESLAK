@@ -1,11 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Reservations } from "shared/services";
 import Vehicles from "shared/services/Vehicles";
-import {
-  GetVehiclesParams,
-  CreateVehicleParams,
-} from "shared/services/Vehicles";
+import { GetVehiclesParams } from "shared/services/Vehicles";
 import { MODULE_NAME } from "../strings";
+import { CreateVehiclePayload, DeleteVehiclePayload } from "./actions.types";
 
 const vehicles = new Vehicles();
 
@@ -16,5 +13,18 @@ export const getVehicles = createAsyncThunk(
 
 export const createVehicle = createAsyncThunk(
   `${MODULE_NAME}/createVehicle`,
-  (params: CreateVehicleParams) => vehicles.createVehicle(params)
+  async ({ params, onSuccess }: CreateVehiclePayload) => {
+    const data = vehicles.createVehicle(params);
+    if (onSuccess) onSuccess();
+    return data;
+  }
+);
+
+export const deleteVehicle = createAsyncThunk(
+  `${MODULE_NAME}/deleteVehicle`,
+  async ({ vehicleId, onSuccess }: DeleteVehiclePayload) => {
+    const data = await vehicles.deleteVehicle(vehicleId);
+    if (onSuccess) onSuccess();
+    return data;
+  }
 );
