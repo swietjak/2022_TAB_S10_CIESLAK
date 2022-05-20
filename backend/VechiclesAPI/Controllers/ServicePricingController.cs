@@ -44,13 +44,13 @@ namespace VehiclesAPI.Controllers
                 }
                 ).OrderBy(s => s.providerName)
                 .Where(s => s.providerName.Contains(string.IsNullOrEmpty(ProviderName) ? "" : ProviderName))
-                .Where(s => s.providerName.Contains(string.IsNullOrEmpty(ServiceName) ? "" : ServiceName))
-                .Where(s => (StartPeriod != null ? StartPeriod : DateTime.UtcNow ) >= s.startDate)
-                .Where(s => (s.endDate != null ? ((EndPeriod != null ? EndPeriod : DateTime.UtcNow ) <= s.endDate) : true)) 
+                .Where(s => s.serviceName.Contains(string.IsNullOrEmpty(ServiceName) ? "" : ServiceName))
+                .Where(s => (StartPeriod != null ? StartPeriod : DateTime.UtcNow) >= s.startDate)
+                .Where(s => (s.endDate != null ? ((EndPeriod != null ? EndPeriod : DateTime.UtcNow) <= s.endDate) : true))
                 .ToList();
         }
 
-       
+
 
         [HttpGet("{id}")]
         public GetServicePricingDto GetServicePricingById(int id)
@@ -87,61 +87,70 @@ namespace VehiclesAPI.Controllers
             try
             {
                 var newServicePricing = value.AsServicePricing();
-                OfferServiceNumber = isSameService(value.OfferedService.ServiceName, value.OfferedService.ProviderName);
+                OfferServiceNumber = isSameService(value.offeredService.serviceName, value.offeredService.providerName);
                 int canBeAdded = 1;
-                if(OfferServiceNumber != 0) {
+                if (OfferServiceNumber != 0)
+                {
                     newServicePricing.OfferedServiceId = OfferServiceNumber;
                     canBeAdded = updateServicePricing(newServicePricing.StartDate, newServicePricing.Price, newServicePricing.OfferedServiceId);
                 }
-                else {
-                    Service service = new Service {Name = value.OfferedService.ServiceName};
+                else
+                {
+                    Service service = new Service { Name = value.offeredService.serviceName };
                     this.context.Services.Add(service);
-                    ExternalServicer externalServicer = new ExternalServicer {Name = value.OfferedService.ProviderName};
+                    ExternalServicer externalServicer = new ExternalServicer { Name = value.offeredService.providerName };
                     this.context.ExternalServicers.Add(externalServicer);
-                    OfferedService offeredService = new OfferedService{
+                    OfferedService offeredService = new OfferedService
+                    {
                         ExternalServicerId = externalServicer.Id,
                         ServiceId = service.Id
                     };
                     this.context.OfferedServices.Add(offeredService);
                     newServicePricing.OfferedServiceId = offeredService.Id;
                 }
-                if(canBeAdded > 0){
+                if (canBeAdded > 0)
+                {
                     this.context.ServicePricings.Add(newServicePricing);
                     this.context.SaveChanges();
                     return StatusCode(201, newServicePricing.Id);
                 }
-                
+
             }
             catch (System.Exception e)
             {
                 return StatusCode(400, e.StackTrace);
             }
 
-            
+
             return StatusCode(201, OfferServiceNumber);
         }
 
-        private  int updateServicePricing(DateTime endTime, double  price, int offeredServiceId){
-            var id = 
+        private int updateServicePricing(DateTime endTime, double price, int offeredServiceId)
+        {
+            var id =
                 (from s in context.ServicePricings
-                where s.OfferedServiceId == offeredServiceId
-                select s.Id
+                 where s.OfferedServiceId == offeredServiceId
+                 select s.Id
                 ).First();
-            var existingServicePrising =  this.context.ServicePricings.Find(id);
+            var existingServicePrising = this.context.ServicePricings.Find(id);
             if (existingServicePrising == null)
             {
                 return -1; // service pricing is not existing
             }
-            if((existingServicePrising.EndDate == null || existingServicePrising.EndDate > endTime )&& existingServicePrising.Price != price){
+            if ((existingServicePrising.EndDate == null || existingServicePrising.EndDate > endTime) && existingServicePrising.Price != price)
+            {
                 existingServicePrising.EndDate = endTime;
                 this.context.SaveChanges();
                 return 1; //changed end date
-            }else{
+            }
+            else
+            {
                 return 0; //haven't changed date
             }
         }
 
-        private int isSameService(string service, string provider){
+        private int isSameService(string service, string provider)
+        {
             return (
                 from o in context.OfferedServices
                 join s in context.Services
@@ -151,7 +160,7 @@ namespace VehiclesAPI.Controllers
                 where e.Name == provider && s.Name == service
                 select o.Id
             ).FirstOrDefault();
-                
+
         }
     }
 }

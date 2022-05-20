@@ -9,9 +9,9 @@ namespace VehiclesAPI.Extensions
         {
             return new ServicePricing
             {
-                Price = item.Price,
-                StartDate = item.StartDate,
-                EndDate = item.EndDate
+                Price = item.price,
+                StartDate = item.startDate,
+                EndDate = item.endDate
             };
         }
     }
