@@ -83,10 +83,11 @@ namespace VehiclesAPI.Controllers
         [HttpPost]
         public IActionResult CreateServicePricing([FromBody] CreateServicePricingDto value)
         {
+            int OfferServiceNumber = 0;
             try
             {
                 var newServicePricing = value.AsServicePricing();
-                int OfferServiceNumber = isSameService(value.OfferedService.ServiceName, value.OfferedService.ProviderName);
+                OfferServiceNumber = isSameService(value.OfferedService.ServiceName, value.OfferedService.ProviderName);
                 int canBeAdded = 1;
                 if(OfferServiceNumber != 0) {
                     newServicePricing.OfferedServiceId = OfferServiceNumber;
@@ -102,7 +103,7 @@ namespace VehiclesAPI.Controllers
                         ServiceId = service.Id
                     };
                     this.context.OfferedServices.Add(offeredService);
-                    newServicePricing.OfferedServiceId = OfferServiceNumber;
+                    newServicePricing.OfferedServiceId = offeredService.Id;
                 }
                 if(canBeAdded > 0){
                     this.context.ServicePricings.Add(newServicePricing);
@@ -116,21 +117,8 @@ namespace VehiclesAPI.Controllers
                 return StatusCode(400, e.StackTrace);
             }
 
-            // this.context.Vehicles.Add(newServicePricing);
-
-            // var vehicleEquipmentList = value.equipments.Select(e => new VehicleEquipment { Amount = e.amount, EquipmentId = e.id, VehicleId = newVehicle.Id });
-
-            // try
-            // {
-            //     this.context.VehicleEquipments.AddRange(vehicleEquipmentList);
-            //     this.context.SaveChanges();
-            //     return StatusCode(201, newVehicle.Id);
-            // }
-            // catch (System.Exception e)
-            // {
-            //     return StatusCode(400, e.StackTrace);
-            // }
-            return StatusCode(400, "OfferServiceNumber");
+            
+            return StatusCode(201, OfferServiceNumber);
         }
 
         private  int updateServicePricing(DateTime endTime, double  price, int offeredServiceId){
@@ -142,19 +130,15 @@ namespace VehiclesAPI.Controllers
             var existingServicePrising =  this.context.ServicePricings.Find(id);
             if (existingServicePrising == null)
             {
-                return -1;
+                return -1; // service pricing is not existing
             }
             if((existingServicePrising.EndDate == null || existingServicePrising.EndDate > endTime )&& existingServicePrising.Price != price){
                 existingServicePrising.EndDate = endTime;
                 this.context.SaveChanges();
-                return 1;
+                return 1; //changed end date
             }else{
-                return 0;
+                return 0; //haven't changed date
             }
-            
-
-            
-
         }
 
         private int isSameService(string service, string provider){
