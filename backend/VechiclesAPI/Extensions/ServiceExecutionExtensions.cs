@@ -14,7 +14,8 @@ namespace VehiclesAPI.Extensions
                 EndDate = item.endDate,
                 Description = item.description,
                 VehicleCareId = item.vehicleCareId,
-                OfferedServiceId = item.offeredServiceId
+                OfferedServiceId = item.offeredServiceId,
+                IsFinished = false
             };
         }
     }

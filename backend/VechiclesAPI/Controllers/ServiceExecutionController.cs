@@ -186,6 +186,27 @@ namespace VehiclesAPI.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateServiceExtensionFinish(int id)
+        {
+            var existingServiceExecution = await this.context.ServiceExecutions.FindAsync(id);
+            if (existingServiceExecution == null)
+            {
+                return NotFound();
+            }
 
+            existingServiceExecution.IsFinished = !existingServiceExecution.IsFinished;
+
+
+            try
+            {
+                await this.context.SaveChangesAsync();
+                return StatusCode(201, "Service Execution updated");
+            }
+            catch
+            {
+                return StatusCode(400, "something went wrong");
+            }
+        }
     }
 }
