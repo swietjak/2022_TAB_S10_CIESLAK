@@ -18,3 +18,8 @@ export const deleteUserReservation = createAsyncThunk(
     return data;
   }
 );
+
+export const getCareTakerReservations = createAsyncThunk(
+  `${MODULE_NAME}/getCareTakerReservations`,
+  (careTakerId: number) => reservations.getCareTakerReservations(careTakerId)
+);

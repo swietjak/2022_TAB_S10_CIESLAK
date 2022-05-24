@@ -4,7 +4,7 @@ import {
   useColumns,
   useConfirmationModal,
   useUserResrvations,
-} from "./ReservationsTable.utils";
+} from "./UserReservationsTable.utils";
 
 export const PageWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(3, 2),

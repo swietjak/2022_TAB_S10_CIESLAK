@@ -16,7 +16,6 @@ const getInitialPath = ({ hasCarePermissions, isAdmin }: UserPermisions) => {
 
 export const useUserData = () => {
   const { data: userData } = useSelector(selectors.getUserDataResource);
-  console.log("userData", userData);
   const hasCarePermissions = useMemo(
     () => userData && userData.userPermisions.hasCarePermissions,
     [userData]

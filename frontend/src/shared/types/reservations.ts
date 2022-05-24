@@ -19,3 +19,12 @@ export interface VehicleSummary {
   model: string;
   vin: string;
 }
+
+export interface CareTakerReservation {
+  id: number;
+  dateFrom: string;
+  dateTo: string;
+  vehicleSummary: VehicleSummary;
+  workerName: string;
+  workerSurname: string;
+}

@@ -50,7 +50,9 @@ const SampleComponent = ({ initialNum }: SampleComponentProps) => {
           </Grid>
         </Grid>
       </Grid>
-      <Button onClick={() => navigate(paths.reservationsTable)}>XDDD</Button>
+      <Button onClick={() => navigate(paths.userReservationsTable)}>
+        XDDD
+      </Button>
     </PageWrapper>
   );
 };

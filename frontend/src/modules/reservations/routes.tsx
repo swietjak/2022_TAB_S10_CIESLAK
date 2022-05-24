@@ -1,5 +1,6 @@
 import { paths } from "config";
-import { ReservationSummary, ReservationsTable } from "./pages";
+import { ReservationSummary, UserReservationsTable } from "./pages";
+import { CareTakerReservations } from "./pages/CareTakerReservations";
 
 const routes = [
   {
@@ -7,8 +8,12 @@ const routes = [
     element: () => <ReservationSummary />,
   },
   {
-    path: paths.reservationsTable,
-    element: () => <ReservationsTable />,
+    path: paths.userReservationsTable,
+    element: () => <UserReservationsTable />,
+  },
+  {
+    path: paths.careTakerReservationsTable,
+    element: () => <CareTakerReservations />,
   },
 ];
 

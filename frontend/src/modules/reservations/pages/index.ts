@@ -1,2 +1,2 @@
 export { default as ReservationSummary } from "./ReservationSummary";
-export { default as ReservationsTable } from "./ReservationsTable";
+export { default as UserReservationsTable } from "./UserReservationsTable";

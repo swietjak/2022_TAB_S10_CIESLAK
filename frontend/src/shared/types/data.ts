@@ -22,3 +22,8 @@ export interface Column<T> {
   label: string;
   renderData: (data: T) => JSX.Element | string;
 }
+
+export interface TabEntry {
+  label: string;
+  panel: JSX.Element | string;
+}

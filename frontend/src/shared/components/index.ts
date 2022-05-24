@@ -5,3 +5,4 @@ export { default as Topbar } from "./Topbar";
 export { default as CustomTable } from "./CustomTable";
 export { default as ConfirmationDialog } from "./ConfirmationDialog";
 export { default as FormDatePicker } from "./FormDatePicker";
+export { default as CustomTabs } from "./CustomTabs";
