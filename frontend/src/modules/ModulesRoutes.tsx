@@ -1,7 +1,7 @@
 import { paths } from "config";
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { useInitialPath, useUserData } from "shared/hooks";
+import { useUserData } from "shared/hooks";
 import { helloRoutes } from "./home";
 import { reservationsRoutes } from "./reservations";
 import { vehiclesRoutes } from "./vehicles";
@@ -9,14 +9,13 @@ import { vehiclesRoutes } from "./vehicles";
 const routes = [...reservationsRoutes, ...helloRoutes, ...vehiclesRoutes];
 
 const ModalRoutes = () => {
-  const initialPath = useInitialPath();
-  const { userId, hasCarePermissions } = useUserData();
+  const { initialPath, userId } = useUserData();
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (!userId) return navigate(paths.login);
-    console.log(userId, hasCarePermissions);
-    return navigate(initialPath);
-  }, [initialPath, userId]); //eslint-disable-line
+    console.log("chuj");
+    if (!userId) navigate(paths.login);
+  }, [userId]); //eslint-disable-line
 
   return (
     <Routes>

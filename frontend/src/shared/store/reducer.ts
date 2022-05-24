@@ -12,15 +12,9 @@ export interface State {
 const initialState: State = {
   loading: LoadingStatus.Idle,
   error: null,
-  userData: resource.getInitial({
-    name: "xd",
-    surname: "xd",
-    userPermisions: {
-      hasCarePermissions: true,
-      isAdmin: true,
-    },
-    userId: 12,
-  }),
+  userData: resource.getInitial(
+    JSON.parse(localStorage.getItem("user") || "") as UserData | null
+  ),
 };
 
 export default createReducer(initialState, (builder) =>
@@ -30,11 +24,13 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(login.fulfilled, (state, action) => {
       resource.setSucceeded(state.userData, action.payload);
+      localStorage.setItem("user", JSON.stringify(action.payload));
     })
     .addCase(login.rejected, (state, action) => {
       resource.setFailed(state.userData, action.error.message);
     })
     .addCase(resetUserData, (state) => {
       resource.reset(state.userData, null);
+      localStorage.setItem("user", JSON.stringify(null));
     })
 );

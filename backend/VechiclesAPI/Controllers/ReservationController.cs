@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using VehiclesAPI.Models;
 using VehiclesAPI.Dtos;
+using VehiclesAPI.Extensions;
 
 namespace VehiclesAPI.Controllers
 {
@@ -19,14 +20,14 @@ namespace VehiclesAPI.Controllers
         public IActionResult Post([FromBody] CreateReservationDto value)
         {
 
-            var existingUser = this.context.Workers.FirstOrDefault(existingUser => existingUser.Id.Equals(value.WorkerId));
+            var existingUser = this.context.Workers.FirstOrDefault(existingUser => existingUser.Id.Equals(value.workerId));
             if (existingUser == null)
             {
                 return StatusCode(400, "Worker with this ID doesn't exist");
             }
 
 
-            var existingVehicle = this.context.Vehicles.FirstOrDefault(existingVehicle => existingVehicle.Id.Equals(value.VehicleId));
+            var existingVehicle = this.context.Vehicles.FirstOrDefault(existingVehicle => existingVehicle.Id.Equals(value.vehicleId));
             if (existingVehicle == null)
             {
                 return StatusCode(400, "Vehicle with this ID doesn't exist");
@@ -34,9 +35,9 @@ namespace VehiclesAPI.Controllers
 
             Reservation newReservation = new Reservation
             {
-                DateFrom = value.DateFrom,
-                DateTo = value.DateTo,
-                Description = value.Description,
+                DateFrom = value.dateFrom,
+                DateTo = value.dateTo,
+                Description = value.description,
                 WorkerId = existingUser.Id,
                 VehicleId = existingVehicle.Id
             };
@@ -65,6 +66,21 @@ namespace VehiclesAPI.Controllers
             this.context.Reservations.Remove(existingReservation);
             await this.context.SaveChangesAsync();
             return StatusCode(201, "Reservation cancelled successfully");
+        }
+
+        [HttpGet("user-reservations/{userId}")]
+        public IEnumerable<object> GetUserReseravtions(int userId)
+        {
+            var userReservations = this.context.Reservations
+            .Where(reservation => reservation.WorkerId == userId)
+            .Join(this.context.Vehicles, reservation => reservation.VehicleId, vehicle => vehicle.Id, (reservation, vehicle) => new { reservation, vehicle })
+            .GroupJoin(this.context.Rentals, combinedEntry => combinedEntry.reservation.Id, rental => rental.ReservationId, (combinedEntry, rental) => new { reservation = combinedEntry.reservation, vehicle = combinedEntry.vehicle, rental = rental })
+            .SelectMany(combinedEntry => combinedEntry.rental.DefaultIfEmpty(), (combined, rental) => new { reservation = combined.reservation, vehicle = combined.vehicle, rental })
+            .GroupJoin(this.context.VehicleReturns, combinedEntry => combinedEntry.rental == null ? 0 : combinedEntry.rental.Id, vehicleReturn => vehicleReturn.RentalId, (combinedEntry, vehicleReturn) => new { reservation = combinedEntry.reservation, vehicle = combinedEntry.vehicle, rental = combinedEntry.rental, vehicleReturn })
+            .SelectMany(combinedEntry => combinedEntry.vehicleReturn.DefaultIfEmpty(), (combined, vehicleReturn) => combined.reservation.AsGetReservationsDto(combined.vehicle, combined.rental, vehicleReturn))
+            .ToList();
+
+            return userReservations;
         }
     }
 }

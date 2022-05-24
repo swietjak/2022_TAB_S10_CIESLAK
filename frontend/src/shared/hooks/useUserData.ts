@@ -1,25 +1,42 @@
+import { paths } from "config";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { selectors } from "../store";
+import { selectors } from "shared/store";
+
+interface UserPermisions {
+  isAdmin: boolean;
+  hasCarePermissions: boolean;
+}
+
+const getInitialPath = ({ hasCarePermissions, isAdmin }: UserPermisions) => {
+  if (isAdmin) return paths.adminVehiclesList;
+  if (hasCarePermissions) return paths.careTakerVehiclesList;
+  return paths.workerVehiclesList;
+};
 
 export const useUserData = () => {
-  const { data } = useSelector(selectors.getUserDataResource);
-
+  const { data: userData } = useSelector(selectors.getUserDataResource);
+  console.log("userData", userData);
   const hasCarePermissions = useMemo(
-    () => data && data.userPermisions.hasCarePermissions,
-    [data]
+    () => userData && userData.userPermisions.hasCarePermissions,
+    [userData]
   );
 
   const hasAdminPermissions = useMemo(
-    () => data && data.userPermisions.isAdmin,
-    [data]
+    () => userData && userData.userPermisions.isAdmin,
+    [userData]
   );
 
-  const userId = useMemo(() => data && data.userId, [data]);
+  const userId = useMemo(() => userData && userData.userId, [userData]);
+
+  const initialPath = !!userData
+    ? getInitialPath(userData.userPermisions)
+    : paths.login;
 
   return {
     hasCarePermissions,
     hasAdminPermissions,
     userId,
+    initialPath,
   };
 };

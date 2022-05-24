@@ -1,16 +1,8 @@
 import { Grid, Typography } from "@mui/material";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { WorkerCarsTable } from "../components";
-import { actions } from "../store";
 import { PageWrapper } from "./style";
 
 const WorkerVehiclesList = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(actions.getVehicles({}));
-  }, []); //eslint-disable-line
-
   return (
     <PageWrapper>
       <Grid container>

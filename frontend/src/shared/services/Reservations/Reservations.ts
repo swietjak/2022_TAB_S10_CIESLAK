@@ -1,11 +1,26 @@
-import { reservationsMock } from "shared/mocks";
+import { UserReservation } from "shared/types";
 import Api from "../Api";
+import { CreateUserReservationParams } from "./Reservations.types";
 
 class Reservations extends Api {
-  public getUserReservations = async () => {
-    const { data } = await new Promise((resolve) => {
-      setTimeout(() => resolve({ data: reservationsMock }), 5000);
-    });
+  public getUserReservations = async (userId: number) => {
+    const { data } = await this.api.get<UserReservation[]>(
+      `/Reservation/user-reservations/${userId}`
+    );
+    return data;
+  };
+
+  public createUserReservation = async (
+    params: CreateUserReservationParams
+  ) => {
+    const { data } = await this.api.post<string>(`/Reservation`, params);
+    return data;
+  };
+
+  public deleteUserReservation = async (reservationId: number) => {
+    const { data } = await this.api.delete<string>(
+      `/Reservation/${reservationId}`
+    );
     return data;
   };
 }
