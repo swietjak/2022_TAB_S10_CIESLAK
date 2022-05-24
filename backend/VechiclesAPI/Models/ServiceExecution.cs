@@ -10,7 +10,7 @@ namespace VehiclesAPI.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
-        public bool IsFinished { get; set; }
+        public bool IsFinished { get; set; } //To zrób do crud xD
         public int VehicleCareId { get; set; }
         public int OfferedServiceId { get; set; }
 

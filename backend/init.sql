@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.vechicles
     vin text NOT NULL,
     engine_capacity double precision NOT NULL,
     engine_power int NOT NULL,
+    is_deleted boolean NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -34,6 +35,7 @@ CREATE TABLE IF NOT EXISTS public.workers
     hasCarePermissions boolean,
     isAdmin boolean,
     email TEXT NOT NULL,
+    is_deleted boolean NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -255,14 +257,14 @@ ALTER TABLE IF EXISTS public.service_pricing
 END;
 
 INSERT INTO 
-    public.workers (id, first_name, surname, pesel, password, hasCarePermissions, isAdmin, email)
+    public.workers (id, first_name, surname, pesel, password, hasCarePermissions, isAdmin, email, is_deleted)
 VALUES
-    (1, 'Jan', 'Kowalski', '12345678', 'AA', true, true, 'test@example.com'),
-    (2, 'Jan', 'Nowak', '12345678', 'AA', true, false, 'test1@example.com'),
-    (3, 'Jan', 'Bowak', '123456789', 'AA', true, false, 'test2@example.com'),
-    (4, 'Jan', 'Mowak', '123456789', 'AA', false, false, 'test3@example.com'),
-    (5, 'Jan', 'Lowak', '123456789', 'AA', false, false, 'test4@example.com'),
-    (6, 'Jan', 'Dowak', '123456789', 'AA', false, false, 'test5@example.com');
+    (1, 'Jan', 'Kowalski', '12345678', 'AA', true, true, 'test@example.com', false),
+    (2, 'Jan', 'Nowak', '12345678', 'AA', true, false, 'test1@example.com', false),
+    (3, 'Jan', 'Bowak', '123456789', 'AA', true, false, 'test2@example.com', false),
+    (4, 'Jan', 'Mowak', '123456789', 'AA', false, false, 'test3@example.com', false),
+    (5, 'Jan', 'Lowak', '123456789', 'AA', false, false, 'test4@example.com', false),
+    (6, 'Jan', 'Dowak', '123456789', 'AA', false, false, 'test5@example.com', false);
 
 INSERT INTO 
     public.services (id, name)
@@ -300,13 +302,13 @@ VALUES
     ('dzik', 'jest dziki');
 
 INSERT INTO 
-    public.vechicles ( brand, model, vin, engine_capacity, engine_power)
+    public.vechicles ( brand, model, vin, engine_capacity, engine_power, is_deleted)
 VALUES
-    ('subaru', 'impreza', 'JF1GD70625L518106', 1.9, 130),
-    ('bmw', 'e36', 'JF1GD70625L518106', 1.9, 130),
-    ('audi', 'a6', 'JF1GD70625L518106', 1.9, 130),
-    ('audi', 'a4', 'JF1GD70625L518106', 1.9, 130),
-    ('audi', 'a3', 'JF1GD70625L518106', 1.9, 130);
+    ('subaru', 'impreza', 'JF1GD70625L518106', 1.9, 130, false),
+    ('bmw', 'e36', 'JF1GD70625L518106', 1.9, 130, false),
+    ('audi', 'a6', 'JF1GD70625L518106', 1.9, 130, false),
+    ('audi', 'a4', 'JF1GD70625L518106', 1.9, 130, false),
+    ('audi', 'a3', 'JF1GD70625L518106', 1.9, 130, false);
 
 
 INSERT INTO 
