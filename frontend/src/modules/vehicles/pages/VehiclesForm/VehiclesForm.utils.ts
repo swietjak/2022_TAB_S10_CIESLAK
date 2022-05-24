@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { object, SchemaOf, string, number, array, mixed } from "yup";
-import { Equipment, FieldValue } from "shared/types";
+import { Equipment } from "shared/types";
 import { actions } from "../../store";
 import { useCallback } from "react";
 import { paths } from "config";

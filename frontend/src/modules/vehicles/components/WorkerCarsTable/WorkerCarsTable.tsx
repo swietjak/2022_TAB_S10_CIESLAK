@@ -1,59 +1,50 @@
+import { Button, Grid } from "@mui/material";
+import { FormProvider } from "react-hook-form";
+import { CustomTable, FormDatePicker } from "shared/components";
+import { CreateReservationDialog } from "./CreateReservationDialog";
 import {
-  LinearProgress,
-  styled,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import { useSelector } from "react-redux";
-import ConfirmationDialog from "shared/components/ConfirmationDialog/ConfirmationDialog";
-import { LoadingStatus } from "shared/types";
-import { selectors } from "../../store";
-import { useColumns, useConfirmationModal } from "./WorkerCarsTable.utils";
-
-const TableContainer = styled("div")(({ theme }) => ({
-  padding: theme.spacing(3),
-}));
+  useColumns,
+  useReservationModal,
+  useFormProps,
+  useOnSubmit,
+  AvailabilitiesFiltersFields,
+  useAvailableVehicles,
+} from "./WorkerCarsTable.utils";
 
 export const WorkerCarsTable = () => {
-  const { isOpen, handleClose, handleConfirm, handleOpen } =
-    useConfirmationModal();
+  const formProps = useFormProps();
+  const { control, setValue } = formProps;
+  const { isOpen, handleClose, handleOpen } = useReservationModal(
+    control,
+    setValue
+  );
+  const onSubmit = useOnSubmit(handleClose);
   const columns = useColumns(handleOpen);
+  const { getAvailableVehicles, loading, vehiclesData } =
+    useAvailableVehicles(control);
 
-  const { data: vehiclesData, loading } = useSelector(selectors.getVehicles);
+  console.log("errory", formProps.formState.errors);
 
   return (
-    <>
-      <ConfirmationDialog
-        onClose={handleClose}
-        onConfirm={handleConfirm}
-        open={isOpen}
-        mainContent="This action will delete the selected vehicle"
-      />
-      <TableContainer>
-        {loading === LoadingStatus.Pending && <LinearProgress />}
-        <Table>
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell>{column.label}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {vehiclesData.map((vehicle) => (
-              <TableRow>
-                {columns.map((col) => (
-                  <TableCell>{col.renderData(vehicle)}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+    <form onSubmit={formProps.handleSubmit(onSubmit)}>
+      <FormProvider {...formProps}>
+        {isOpen && <CreateReservationDialog open onClose={handleClose} />}
+        <Grid spacing={4} container alignItems="center">
+          <Grid item>
+            <FormDatePicker name={AvailabilitiesFiltersFields.DateFrom} />
+          </Grid>
+          <Grid item>
+            <FormDatePicker name={AvailabilitiesFiltersFields.DateTo} />
+          </Grid>
+          <Grid item>
+            <Button variant="contained" onClick={() => getAvailableVehicles()}>
+              Find vehicles
+            </Button>
+          </Grid>
+        </Grid>
+        <CustomTable columns={columns} data={vehiclesData} loading={loading} />
+      </FormProvider>
+    </form>
   );
 };
 

@@ -21,48 +21,31 @@ namespace VehiclesAPI.Controllers
         public IActionResult Register([FromBody] RegisterDto value)
         {
             var existingUser = this.context.Workers.FirstOrDefault(existingUser => existingUser.Email.Equals(value.Email));
-            if (existingUser == null)
-            {
-                Worker newWorker = new Worker
-                {
-                    Email = value.Email,
-                    FirstName = value.FirstName,
-                    Surname = value.LastName,
-                    Password = value.Password,
-                    Pesel = value.Pesel
-                };
+            if (existingUser != null) return StatusCode(400, "User with this e-mail already exists");
 
-                if (value.Hascarepermissions.HasValue)
-                {
-                    newWorker.Hascarepermissions = value.Hascarepermissions.HasValue;
-                }
-                else
-                {
-                    newWorker.Hascarepermissions = false;
-                }
-                if (value.Isadmin.HasValue)
-                {
-                    newWorker.Isadmin = value.Isadmin.HasValue;
-                }
-                else
-                {
-                    newWorker.Isadmin = false;
-                }
-                this.context.Workers.Add(newWorker);
-                try
-                {
-                    this.context.SaveChanges();
-                    return StatusCode(201, value);
-                }
-                catch
-                {
-                    return StatusCode(400, "Failed registration");
-                }
-            }
-            else
+            Worker newWorker = new Worker
             {
-                return StatusCode(400, "User with this e-mail already exists");
+                Email = value.Email,
+                FirstName = value.FirstName,
+                Surname = value.LastName,
+                Password = value.Password,
+                Pesel = value.Pesel,
+                Hascarepermissions = value.Hascarepermissions ?? false,
+                Isadmin = value.Isadmin ?? false
+            };
+
+            this.context.Workers.Add(newWorker);
+            try
+            {
+                this.context.SaveChanges();
+                return StatusCode(201, value);
+            }
+            catch
+            {
+                return StatusCode(400, "Failed registration");
             }
         }
+
     }
 }
+

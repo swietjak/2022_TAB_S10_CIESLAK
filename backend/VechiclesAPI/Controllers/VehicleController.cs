@@ -126,6 +126,15 @@ namespace VehiclesAPI.Controllers
             var newVehicle = value.AsVehicle();
             this.context.Vehicles.Add(newVehicle);
 
+            try
+            {
+                this.context.SaveChanges();
+            }
+            catch (System.Exception e)
+            {
+                return StatusCode(400, e.StackTrace);
+            }
+
             var vehicleEquipmentList = value.equipments.Select(e => new VehicleEquipment { Amount = e.amount, EquipmentId = e.id, VehicleId = newVehicle.Id });
 
             try

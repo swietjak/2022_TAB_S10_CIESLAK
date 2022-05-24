@@ -16,5 +16,16 @@ namespace VehiclesAPI.Extensions
                 Vin = item.vin,
             };
         }
+
+        public static VehicleSummary AsVehicleSummary(this Vehicle item)
+        {
+            return new VehicleSummary
+            {
+                brand = item.Brand,
+                id = item.Id,
+                model = item.Model,
+                vin = item.Vin
+            };
+        }
     }
 }

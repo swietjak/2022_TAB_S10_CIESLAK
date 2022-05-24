@@ -1,8 +1,9 @@
 import { Button, Grid, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { FormProvider } from "react-hook-form";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TextField } from "shared/components";
-import { useInitialPath, useUserData } from "shared/hooks";
+import { useUserData } from "shared/hooks";
 import { LoginContainer } from "./Login.styles";
 import { LoginFormFields, useOnLoginSubmit, useLoginForm } from "./Login.utils";
 
@@ -11,8 +12,12 @@ type LoginProps = {};
 const Login = (props: LoginProps) => {
   const formProps = useLoginForm();
   const onLoginSubmit = useOnLoginSubmit();
-  const initialPath = useInitialPath();
-  const { userId } = useUserData();
+  const navigate = useNavigate();
+  const { userId, initialPath } = useUserData();
+
+  useEffect(() => {
+    if (userId) navigate(initialPath);
+  }, [userId]); //eslint-disable-line
 
   return (
     <form onSubmit={formProps.handleSubmit(onLoginSubmit)}>
