@@ -27,3 +27,14 @@ export interface TabEntry {
   label: string;
   panel: JSX.Element | string;
 }
+
+export interface SummaryEntry {
+  label: string;
+  value: JSX.Element | string | number;
+}
+
+export interface DialogField {
+  label: string;
+  type: string;
+  name: string;
+}

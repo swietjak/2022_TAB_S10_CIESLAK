@@ -23,7 +23,7 @@ const ConfirmationDialog = ({
   };
   return (
     <Dialog {...props}>
-      <DialogTitle>Are you sure?</DialogTitle>
+      <DialogTitle></DialogTitle>
       <DialogContent>{mainContent}</DialogContent>
       <DialogActions>
         <Grid container justifyContent="space-between">
