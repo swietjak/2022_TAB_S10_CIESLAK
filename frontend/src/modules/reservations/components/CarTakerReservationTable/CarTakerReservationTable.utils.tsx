@@ -2,7 +2,7 @@ import { DeleteForever } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { CareTakerReservation } from "shared/types";
+import { CareTakerReservation, SummaryEntry } from "shared/types";
 import { actions } from "../../store";
 import { Button } from "@mui/material";
 import { object, SchemaOf, string, number, array, mixed } from "yup";
@@ -69,10 +69,16 @@ export const useFormModal = () => {
   const [reservationToRent, setReservationToRent] = useState<number | null>(
     null
   );
-
+  const summary: SummaryEntry[] = [];
   const handleClose = () => setReservationToRent(null);
   const handleOpen = (data: CareTakerReservation) => {
     setReservationToRent(data.id);
+    summary.push(
+      { label: "Data from", value: data.dateFrom },
+      { label: "Data to", value: data.dateTo },
+      { label: "Brand", value: data.vehicleSummary.brand },
+      { label: "Model", value: data.vehicleSummary.model }
+    );
   };
   const handlePost = useOnSubmit();
 
@@ -97,6 +103,7 @@ export const useFormModal = () => {
       { name: "description", label: "description", type: "text" },
       { name: "date", label: "Rental date", type: "date" },
     ],
+    summaryContent: summary,
   };
 };
 
