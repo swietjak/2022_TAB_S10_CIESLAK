@@ -7,6 +7,7 @@ const paths = {
   adminVehiclesList: "/admin-vehicles-list",
   careTakerVehiclesList: "/care-taker-vehicles-list",
   workerVehiclesList: "/worker-vehicles-list",
+  workerReservationList: "/worker-reservation-list",
   vehiclesForm: "/admin-vehicles-list/new",
   goodbye: "/goodbye",
 };

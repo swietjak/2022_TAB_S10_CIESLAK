@@ -8,6 +8,8 @@ import { Button } from "@mui/material";
 import { object, SchemaOf, string, number, array, mixed } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { paths } from "config";
+import { useNavigate } from "react-router";
 
 export enum RentalFormFields {
   Meters = "meterIndicator",
@@ -31,59 +33,76 @@ export const validationSchema: SchemaOf<RentalFormValues> = object()
   .shape({
     [RentalFormFields.Meters]: number().required("REQUIRED"),
     [RentalFormFields.Description]: string().required("REQUIRED"),
-    [RentalFormFields.Description]: string().required("REQUIRED"),
+    [RentalFormFields.Date]: string().required("REQUIRED"),
   })
   .required();
 
 export const useOnSubmit = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const onSuccess = useCallback(
-    (userId: number) => {
-      dispatch(actions.getCareTakerReservations(userId));
+  const onSuccess = useCallback(() => {
+    navigate(paths.workerReservationList);
+  }, [navigate]);
+
+  return useCallback(
+    (values: RentalFormValues, reservationId: number) => {
+      dispatch(
+        actions.createRental({
+          params: { reservationId, ...values },
+          onSuccess,
+        })
+      );
     },
     [dispatch]
   );
-
-  return (values: RentalFormValues, reservationId: number) => {
-    dispatch(
-      actions.createRental({
-        params: { reservationId, ...values },
-        onSuccess,
-      })
-    );
-  };
 };
 
-export const useVehiclesForm = () =>
+export const useRentalForm = () =>
   useForm<RentalFormValues>({
     defaultValues,
     resolver: yupResolver(validationSchema),
     reValidateMode: "onChange",
   });
 
-export const useConfirmationModal = () => {
-  const [carToDelete, setCarToDelete] = useState<number | null>(null);
+export const useFormModal = () => {
+  const [reservationToRent, setReservationToRent] = useState<number | null>(
+    null
+  );
 
-  const handleClose = () => setCarToDelete(null);
-  const handleOpen = (id: number) => setCarToDelete(id);
-  const handleDelete = useVehicleDelete();
+  const handleClose = () => setReservationToRent(null);
+  const handleOpen = (data: CareTakerReservation) => {
+    setReservationToRent(data.id);
+  };
+  const handlePost = useOnSubmit();
 
-  const handleConfirm = useCallback(() => {
-    if (!carToDelete) return;
-    handleDelete(carToDelete);
-    handleClose();
-  }, [carToDelete, handleDelete]);
+  const handleConfirm = useCallback(
+    (values: RentalFormValues) => {
+      if (!reservationToRent) return;
+      handlePost(values, reservationToRent);
+      handleClose();
+    },
+    [reservationToRent, handlePost]
+  );
 
   return {
     handleClose,
     handleOpen,
     handleConfirm,
-    isOpen: !!carToDelete,
+    isOpen: !!reservationToRent,
+    mainContent: "Renting Vehicle:",
+    title: "rent",
+    fields: [
+      { name: "meterIndicator", label: "Meter indicator", type: "number" },
+      { name: "description", label: "description", type: "text" },
+      { name: "date", label: "Rental date", type: "date" },
+    ],
   };
 };
 
-export const useColumns = (handleDialogOpen: (id: number) => void) => {
+export const useColumns = (
+  handleDialogOpen: (data: CareTakerReservation) => void
+) => {
   return useMemo(
     () => [
       {
@@ -105,7 +124,7 @@ export const useColumns = (handleDialogOpen: (id: number) => void) => {
       {
         label: "",
         renderData: (data: CareTakerReservation) => (
-          <Button onClick={() => handleDialogOpen(data.id)}>Rent</Button>
+          <Button onClick={() => handleDialogOpen(data)}>Rent</Button>
         ),
       },
     ],

@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useUserData } from "shared/hooks";
 import { LoadingStatus } from "shared/types";
 import { actions, selectors } from "../../store";
-import { useColumns } from "./CarTakerReservationTable.utils";
+import {
+  useColumns,
+  useRentalForm,
+  useFormModal,
+} from "./CarTakerReservationTable.utils";
 import { CustomTable, FormDialog } from "shared/components";
 
 const CarTakerReservationTable = () => {
@@ -17,14 +21,17 @@ const CarTakerReservationTable = () => {
     dispatch(actions.getCareTakerReservations(userId));
   }, [userId]);
 
-  const columns = useColumns();
-
+  const formProps = useRentalForm();
+  const { isOpen, handleClose, handleConfirm, handleOpen, ...props } =
+    useFormModal();
+  const columns = useColumns(handleOpen);
   return (
     <>
-      <form onSubmit={formProps.handleSubmit(onSubmit)}>
+      <form onSubmit={formProps.handleSubmit(handleConfirm)}>
         <FormDialog
+          {...props}
           onClose={handleClose}
-          onConfirm={handleConfirm}
+          onConfirm={formProps.handleSubmit(handleConfirm)}
           open={isOpen}
           mainContent="This action will delete the selected vehicle"
         />

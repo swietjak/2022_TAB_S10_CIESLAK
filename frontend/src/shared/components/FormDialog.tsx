@@ -11,6 +11,8 @@ import {
   Grid,
 } from "@mui/material";
 import { SummaryEntry, DialogField } from "shared/types";
+import { DatePicker } from "@mui/x-date-pickers";
+import FormDatePicker from "./FormDatePicker";
 
 interface FormDialogProps extends DialogProps {
   title: string;
@@ -20,14 +22,16 @@ interface FormDialogProps extends DialogProps {
   onConfirm: () => void;
 }
 
-export default function FormDialog({
+const FormDialog = ({
   title,
   mainContent,
   summaryContent,
   fields,
   onConfirm,
   ...props
-}: FormDialogProps) {
+}: FormDialogProps) => {
+  const DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+
   const handleClose = () => {
     if (props.onClose) props.onClose({}, "backdropClick");
   };
@@ -35,7 +39,7 @@ export default function FormDialog({
   return (
     <>
       <Dialog {...props}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <>
             <DialogContentText>
@@ -49,15 +53,19 @@ export default function FormDialog({
               </>
             </DialogContentText>
             {fields.map((fields) => {
-              <TextField
-                autoFocus
-                margin="dense"
-                id={fields.name}
-                label={fields.label}
-                type={fields.type}
-                fullWidth
-                variant="standard"
-              />;
+              if (fields.type !== "date") {
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id={fields.name}
+                  label={fields.label}
+                  type={fields.type}
+                  fullWidth
+                  variant="standard"
+                />;
+              } else {
+                <FormDatePicker name={fields.label} />;
+              }
             })}
           </>
         </DialogContent>
@@ -68,4 +76,6 @@ export default function FormDialog({
       </Dialog>
     </>
   );
-}
+};
+
+export default FormDialog;
