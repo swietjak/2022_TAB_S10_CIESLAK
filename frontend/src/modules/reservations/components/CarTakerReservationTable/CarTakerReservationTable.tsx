@@ -8,15 +8,13 @@ import { actions, selectors } from "../../store";
 const CarTakerReservationTable = () => {
   const dispatch = useDispatch();
   const { userId } = useUserData();
-  const {data, loading} = useSelector(selectors.getCareTakerReservations)
+  const { data, loading } = useSelector(selectors.getCareTakerReservations);
 
   useEffect(() => {
     if (!userId) return;
     dispatch(actions.getCareTakerReservations(userId));
   }, [userId]);
-  return (
-    {loading === LoadingStatus.Pending && (<LinearProgress />)}
-  );
+  return <>{loading === LoadingStatus.Pending && <LinearProgress />}</>;
 };
 
 export default CarTakerReservationTable;
