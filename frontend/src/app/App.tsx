@@ -4,8 +4,7 @@ import { Suspense } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { theme } from "config";
-import { ModalRoutes } from "modules";
-import { Loader, Topbar } from "shared/components";
+import { Layout, Loader, Topbar } from "shared/components";
 import { store } from "./App.store";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 
@@ -17,8 +16,7 @@ const App = () => {
           <CssBaseline />
           <Suspense fallback={<Loader />}>
             <BrowserRouter>
-              <Topbar />
-              <ModalRoutes />
+              <Layout />
             </BrowserRouter>
           </Suspense>
         </ThemeProvider>
