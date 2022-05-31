@@ -1,42 +1,46 @@
-import { LinearProgress } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useUserData } from "shared/hooks";
-import { LoadingStatus } from "shared/types";
 import { actions, selectors } from "../../store";
 import {
   useColumns,
   useRentalForm,
   useFormModal,
+  fieldsLabels,
 } from "./CarTakerReservationTable.utils";
 import { CustomTable, FormDialog } from "shared/components";
+import { FormProvider } from "react-hook-form";
 
 const CarTakerReservationTable = () => {
   const dispatch = useDispatch();
   const { userId } = useUserData();
   const { data, loading } = useSelector(selectors.getCareTakerReservations);
-
-  useEffect(() => {
-    if (!userId) return;
-    dispatch(actions.getCareTakerReservations(userId));
-  }, [userId]);
-
   const formProps = useRentalForm();
   const { isOpen, handleClose, handleConfirm, handleOpen, ...props } =
     useFormModal();
   const columns = useColumns(handleOpen);
+
+  useEffect(() => {
+    if (!userId) return;
+    dispatch(actions.getCareTakerReservations(userId));
+  }, [dispatch, userId]);
+
   return (
     <>
       <form onSubmit={formProps.handleSubmit(handleConfirm)}>
-        <FormDialog
-          {...props}
-          onClose={handleClose}
-          onConfirm={formProps.handleSubmit(handleConfirm)}
-          open={isOpen}
-          mainContent="This action will delete the selected vehicle"
-        />
+        <FormProvider {...formProps}>
+          <FormDialog
+            {...props}
+            mainContent="Renting Vehicle:"
+            title="Rent"
+            fields={fieldsLabels}
+            onClose={handleClose}
+            onConfirm={formProps.handleSubmit(handleConfirm)}
+            open={isOpen}
+          />
+          <CustomTable columns={columns} data={data} loading={loading} />
+        </FormProvider>
       </form>
-      <CustomTable columns={columns} data={data} loading={loading} />
     </>
   );
 };

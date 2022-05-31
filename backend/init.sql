@@ -46,7 +46,6 @@ CREATE TABLE IF NOT EXISTS public.rentals
     description text,
     reservation_id integer NOT NULL,
     meter_indication integer NOT NULL,
-    vechicle_return_id integer,
     UNIQUE(reservation_id),
     PRIMARY KEY (id)
 );

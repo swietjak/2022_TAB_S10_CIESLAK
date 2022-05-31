@@ -1,6 +1,6 @@
 namespace VehiclesAPI.Dtos
 {
-    public record GetReservationsDto
+    public record GetUserReservationsDto
     {
         public int id { get; set; }
         public DateTime dateFrom { get; set; }

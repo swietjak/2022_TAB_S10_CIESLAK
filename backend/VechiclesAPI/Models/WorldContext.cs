@@ -126,8 +126,6 @@ namespace VehiclesAPI.Models
 
                 entity.Property(e => e.ReservationId).HasColumnName("reservation_id");
 
-                entity.Property(e => e.VehicleReturnId).HasColumnName("vechicle_return_id");
-
                 entity.HasOne(d => d.Reservation)
                     .WithOne(p => p.Rental)
                     .HasForeignKey<Rental>(d => d.ReservationId)

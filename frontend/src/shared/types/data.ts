@@ -35,6 +35,15 @@ export interface SummaryEntry {
 
 export interface DialogField {
   label: string;
-  type: string;
+  type: DialogFieldType;
   name: string;
+}
+
+export type DialogFieldType = "date" | "text" | "number";
+
+export interface VehicleSummary {
+  id: number;
+  brand: string;
+  model: string;
+  vin: string;
 }

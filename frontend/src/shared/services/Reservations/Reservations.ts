@@ -12,7 +12,7 @@ class Reservations extends Api {
 
   public getCareTakerReservations = async (careTakerId: number) => {
     const { data } = await this.api.get<CareTakerReservation[]>(
-      `/Reservation/user-reservations/${careTakerId}`
+      `/Reservation/care-taker-reservations/${careTakerId}`
     );
     return data;
   };

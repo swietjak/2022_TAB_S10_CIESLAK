@@ -5,3 +5,9 @@ export const getUserReservations = (state: RootState) =>
 
 export const getCareTakerReservations = (state: RootState) =>
   state.reservations.getCareTakerReservations;
+
+export const getCareTakerRentals = (state: RootState) =>
+  state.reservations.getCareTakerRentals;
+
+export const getReservationArchive = (state: RootState) =>
+  state.reservations.getReservationArchive;

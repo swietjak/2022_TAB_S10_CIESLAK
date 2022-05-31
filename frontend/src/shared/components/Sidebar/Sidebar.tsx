@@ -1,10 +1,6 @@
-import { ArrowBackIos } from "@mui/icons-material";
 import {
   Divider,
   SwipeableDrawer,
-  Grid,
-  IconButton,
-  Paper,
   List,
   ListItem,
   ListItemButton,
@@ -12,12 +8,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import { useNavigate } from "react-router";
-import {
-  ItemsContainer,
-  SidebarContainer,
-  SidebarItem,
-  EmptyCell,
-} from "./Sidebar.style";
+import { SidebarContainer, EmptyCell } from "./Sidebar.style";
 import { useSidebarEntries } from "./Sidebar.utils";
 
 interface SidebarProps {

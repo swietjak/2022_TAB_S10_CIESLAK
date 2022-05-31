@@ -1,15 +1,18 @@
-import { DeleteForever } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { CareTakerReservation, SummaryEntry } from "shared/types";
+import { CareTakerReservation, DialogField, SummaryEntry } from "shared/types";
 import { actions } from "../../store";
 import { Button } from "@mui/material";
-import { object, SchemaOf, string, number, array, mixed } from "yup";
+import { object, SchemaOf, string, number, date } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { paths } from "config";
 import { useNavigate } from "react-router";
+import { format, parseISO } from "date-fns";
+import { startOfToday } from "date-fns/esm";
+import { useUserData } from "shared/hooks";
+
+const DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 
 export enum RentalFormFields {
   Meters = "meterIndicator",
@@ -17,44 +20,53 @@ export enum RentalFormFields {
   Date = "date",
 }
 
+export const fieldsLabels: DialogField[] = [
+  { name: RentalFormFields.Meters, label: "Meter indicator", type: "number" },
+  { name: RentalFormFields.Description, label: "description", type: "text" },
+  { name: RentalFormFields.Date, label: "Rental date", type: "date" },
+];
+
 export interface RentalFormValues {
   [RentalFormFields.Meters]: number;
   [RentalFormFields.Description]: string;
-  [RentalFormFields.Date]: string;
+  [RentalFormFields.Date]: Date;
 }
 
 export const defaultValues: RentalFormValues = {
   [RentalFormFields.Meters]: 0,
   [RentalFormFields.Description]: "",
-  [RentalFormFields.Date]: "",
+  [RentalFormFields.Date]: startOfToday(),
 };
 
 export const validationSchema: SchemaOf<RentalFormValues> = object()
   .shape({
     [RentalFormFields.Meters]: number().required("REQUIRED"),
-    [RentalFormFields.Description]: string().required("REQUIRED"),
-    [RentalFormFields.Date]: string().required("REQUIRED"),
+    [RentalFormFields.Description]: string(),
+    [RentalFormFields.Date]: date().required("REQUIRED"),
   })
   .required();
 
-export const useOnSubmit = () => {
+export const useOnSubmit = (handleClose: () => void) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { userId } = useUserData();
 
   const onSuccess = useCallback(() => {
-    navigate(paths.workerReservationList);
-  }, [navigate]);
+    handleClose();
+    if (userId) dispatch(actions.getCareTakerReservations(userId));
+  }, [dispatch, handleClose, userId]);
 
   return useCallback(
     (values: RentalFormValues, reservationId: number) => {
+      const { date, ...payload } = values;
+      console.log(values);
       dispatch(
         actions.createRental({
-          params: { reservationId, ...values },
+          params: { reservationId, date: date.toISOString(), ...payload },
           onSuccess,
         })
       );
     },
-    [dispatch]
+    [dispatch, onSuccess]
   );
 };
 
@@ -69,18 +81,28 @@ export const useFormModal = () => {
   const [reservationToRent, setReservationToRent] = useState<number | null>(
     null
   );
-  const summary: SummaryEntry[] = [];
-  const handleClose = () => setReservationToRent(null);
+  const [summaryContent, setSummaryContent] = useState<SummaryEntry[]>([]);
+  const handleClose = () => {
+    setReservationToRent(null);
+    setSummaryContent([]);
+  };
+
   const handleOpen = (data: CareTakerReservation) => {
     setReservationToRent(data.id);
-    summary.push(
-      { label: "Data from", value: data.dateFrom },
-      { label: "Data to", value: data.dateTo },
+    setSummaryContent([
+      {
+        label: "Date from",
+        value: format(parseISO(data.dateFrom), DEFAULT_DATE_FORMAT),
+      },
+      {
+        label: "Date to",
+        value: format(parseISO(data.dateTo), DEFAULT_DATE_FORMAT),
+      },
       { label: "Brand", value: data.vehicleSummary.brand },
-      { label: "Model", value: data.vehicleSummary.model }
-    );
+      { label: "Model", value: data.vehicleSummary.model },
+    ]);
   };
-  const handlePost = useOnSubmit();
+  const handlePost = useOnSubmit(handleClose);
 
   const handleConfirm = useCallback(
     (values: RentalFormValues) => {
@@ -95,15 +117,8 @@ export const useFormModal = () => {
     handleClose,
     handleOpen,
     handleConfirm,
+    summaryContent,
     isOpen: !!reservationToRent,
-    mainContent: "Renting Vehicle:",
-    title: "rent",
-    fields: [
-      { name: "meterIndicator", label: "Meter indicator", type: "number" },
-      { name: "description", label: "description", type: "text" },
-      { name: "date", label: "Rental date", type: "date" },
-    ],
-    summaryContent: summary,
   };
 };
 
@@ -121,22 +136,24 @@ export const useColumns = (
         renderData: (data: CareTakerReservation) => data.vehicleSummary.model,
       },
       {
-        label: "date from",
-        renderData: (data: CareTakerReservation) => data.dateFrom,
+        label: "Date from",
+        renderData: (data: CareTakerReservation) =>
+          format(parseISO(data.dateFrom), DEFAULT_DATE_FORMAT) || "-",
       },
       {
-        label: "date to",
-        renderData: (data: CareTakerReservation) => data.dateTo,
+        label: "Date to",
+        renderData: (data: CareTakerReservation) =>
+          format(parseISO(data.dateTo), DEFAULT_DATE_FORMAT) || "-",
       },
       {
         label: "",
         renderData: (data: CareTakerReservation) => (
-          <Button onClick={() => handleDialogOpen(data)}>Rent</Button>
+          <Button variant="contained" onClick={() => handleDialogOpen(data)}>
+            Rent
+          </Button>
         ),
       },
     ],
     [handleDialogOpen]
   );
 };
-
-export const xd = 1;

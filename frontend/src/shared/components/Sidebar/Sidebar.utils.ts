@@ -8,14 +8,21 @@ const userSidebarEntries = [
 ];
 
 const careTakerSidebarEntries = [
-  ...userSidebarEntries,
-  { label: "Manage cars", Icon: CarRepair, path: paths.userReservationsTable },
+  {
+    label: "Manage cars",
+    Icon: CarRepair,
+    path: paths.careTakerVehiclesList,
+  },
+  {
+    label: "Manage Reservations",
+    Icon: CarRental,
+    path: paths.careTakerReservationsTable,
+  },
 ];
 
 export const useSidebarEntries = () => {
   const { hasAdminPermissions, hasCarePermissions } = useUserData();
 
-  if (hasAdminPermissions || hasAdminPermissions)
-    return careTakerSidebarEntries;
+  if (hasAdminPermissions || hasCarePermissions) return careTakerSidebarEntries;
   return userSidebarEntries;
 };

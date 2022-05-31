@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using VehiclesAPI.Models;
 using VehiclesAPI.Dtos;
 using VehiclesAPI.Extensions;
-
+using Microsoft.EntityFrameworkCore;
 namespace VehiclesAPI.Controllers
 {
     [ApiController]
@@ -69,7 +69,7 @@ namespace VehiclesAPI.Controllers
         }
 
         [HttpGet("user-reservations/{userId}")]
-        public IEnumerable<object> GetUserReseravtions(int userId)
+        public IEnumerable<GetUserReservationsDto> GetUserReseravtions(int userId)
         {
             var userReservations = this.context.Reservations
             .Where(reservation => reservation.WorkerId == userId)
@@ -81,6 +81,35 @@ namespace VehiclesAPI.Controllers
             .ToList();
 
             return userReservations;
+        }
+
+        [HttpGet("care-taker-reservations/{careTakerId}")]
+        public ActionResult<IEnumerable<GetCareTakerReservationsDto>> GetCareTakerReseravtions(int careTakerId)
+        {
+            var existingUser = this.context.Workers.Where(worker => worker.Id == careTakerId).FirstOrDefault();
+
+            if (existingUser == null)
+            {
+                return StatusCode(400, "No such user");
+            }
+
+            var isUserAdmin = existingUser?.Isadmin ?? false;
+
+            var careTakerVehicles = this.context.VehiclesCares
+            .Where(care => care.WorkerId == careTakerId)
+            .Select(care => care.VehicleId)
+            .ToList();
+
+            var careTakerReservations = this.context.Reservations
+            .Where(reservation => isUserAdmin || careTakerVehicles.Any(vehicleId => vehicleId == reservation.Id))
+            .Include(reservation => reservation.Worker)
+            .Include(reservation => reservation.Vehicle)
+            .Include(reservation => reservation.Rental)
+            .Where(reservation => reservation.Rental == null)
+            .Select(reservation => reservation.AsGetCareTakerReservationsDto())
+            .ToList();
+
+            return careTakerReservations;
         }
     }
 }
