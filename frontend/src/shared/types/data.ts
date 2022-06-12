@@ -53,3 +53,13 @@ export interface Entity {
   id: number;
   name: string;
 }
+
+export interface WorkerStatistics {
+  firstName: string;
+  lastName: string;
+  totalReservations: number;
+  currentReservations: number;
+  currentRentals: number;
+  totalDistanceCovered: number;
+  totalFuelUsed: number;
+}

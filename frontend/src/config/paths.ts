@@ -13,6 +13,7 @@ const paths = {
   servicersTable: "/servicers",
   servicersEdit: "/servicers/:servicerId",
   servicerForm: "/servicers/new",
+  workersStatistics: "/workers/statistics",
   goodbye: "/goodbye",
 };
 

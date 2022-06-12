@@ -5,6 +5,7 @@ import { useUserData } from "shared/hooks";
 import { helloRoutes } from "./home";
 import { reservationsRoutes } from "./reservations";
 import { servicersRoutes } from "./servicers";
+import { statisticsRoutes } from "./statistics";
 import { vehiclesRoutes } from "./vehicles";
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
   ...helloRoutes,
   ...vehiclesRoutes,
   ...servicersRoutes,
+  ...statisticsRoutes,
 ];
 
 const ModalRoutes = () => {

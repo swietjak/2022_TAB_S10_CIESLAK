@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VehiclesAPI.Dtos;
 using VehiclesAPI.Models;
+using VehiclesAPI.Extensions;
 
 namespace VehiclesAPI.Controllers
 {
@@ -14,10 +17,17 @@ namespace VehiclesAPI.Controllers
             this.context = context;
         }
 
-        [HttpGet(Name = "GetWorkers")]
-        public IEnumerable<Worker> Get()
+        [HttpGet("statistics")]
+        public IEnumerable<GetWorkerStatisticsDto> GetStatistics()
         {
-            return context.Workers.ToList();
+            var workersStatistics = context.Workers
+            .Include(worker => worker.Reservations)
+                .ThenInclude(reservation => reservation.Rental)
+                    .ThenInclude(rental => rental.VehicleReturn)
+            .Select(worker => worker.AsGetWorkerStatisticsDto())
+            .ToList();
+
+            return workersStatistics;
         }
     }
 }
