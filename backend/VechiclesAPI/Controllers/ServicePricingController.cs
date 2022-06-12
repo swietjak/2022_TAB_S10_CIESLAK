@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using VehiclesAPI.Models;
 using VehiclesAPI.Dtos;
 using VehiclesAPI.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace VehiclesAPI.Controllers
 {
@@ -50,7 +51,18 @@ namespace VehiclesAPI.Controllers
                 .ToList();
         }
 
+        [HttpGet("servicer-pricing/{id}")]
+        public IEnumerable<Entity> GetServicerPricings(int id)
+        {
+            var servicerPricings = this.context.ServicePricings
+            .Include(pricing => pricing.OfferedService)
+                .ThenInclude(offeredService => offeredService.Service)
+            .Where(pricing => pricing.OfferedService.ExternalServicerId == id)
+            .Select(pricing => pricing.AsEntity())
+            .ToList();
 
+            return servicerPricings;
+        }
 
         [HttpGet("{id}")]
         public GetServicePricingDto GetServicePricingById(int id)

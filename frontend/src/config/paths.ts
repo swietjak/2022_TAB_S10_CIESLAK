@@ -9,6 +9,10 @@ const paths = {
   workerVehiclesList: "/worker-vehicles-list",
   workerReservationList: "/worker-reservation-list",
   vehiclesForm: "/admin-vehicles-list/new",
+  vehiclesEdit: "/edit/:vehicleId",
+  servicersTable: "/servicers",
+  servicersEdit: "/servicers/:servicerId",
+  servicerForm: "/servicers/new",
   goodbye: "/goodbye",
 };
 

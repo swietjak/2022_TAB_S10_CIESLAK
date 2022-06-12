@@ -17,7 +17,7 @@ const ReservationsTable = () => {
   const columns = useColumns(handleOpen);
 
   return (
-    <PageWrapper>
+    <>
       <ConfirmationDialog
         onClose={handleClose}
         onConfirm={handleConfirm}
@@ -25,7 +25,7 @@ const ReservationsTable = () => {
         mainContent="This action will delete the selected reservationa"
       />
       <CustomTable data={data} loading={loading} columns={columns} />
-    </PageWrapper>
+    </>
   );
 };
 

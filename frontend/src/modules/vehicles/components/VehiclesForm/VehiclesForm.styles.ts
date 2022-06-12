@@ -8,6 +8,7 @@ export const PageWrapper = styled(Grid)(({ theme }) => ({
     width: 150,
   },
 }));
+
 export const CarContainer = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
 }));

@@ -1,15 +1,19 @@
 import { Button, Grid } from "@mui/material";
-import React from "react";
 import { FormProvider } from "react-hook-form";
-import { CarComponent } from "../../components/VehicleFormComponents/CarComponent";
-import { EquipmentComponent } from "../../components/VehicleFormComponents/EquipmentComponent";
+import { VehicleDetails } from "shared/types";
+import { CarComponent } from "../VehicleFormComponents/CarComponent";
+import { EquipmentComponent } from "../VehicleFormComponents/EquipmentComponent";
 import { useOnSubmit, useVehiclesForm } from "./VehiclesForm.utils";
 import { CarContainer } from "./VehiclesForm.styles";
+import ExecutionsTable from "../ExecutionsTable/ExecutionsTable";
+import VehicleStatistics from "../VehicleStatistics";
 
-type VehiclesFormProps = {};
+interface VehiclesFormProps {
+  vehicle?: VehicleDetails;
+}
 
-const VehiclesForm = (props: VehiclesFormProps) => {
-  const formProps = useVehiclesForm();
+const VehiclesForm = ({ vehicle }: VehiclesFormProps) => {
+  const formProps = useVehiclesForm(vehicle);
   const onSubmit = useOnSubmit();
   return (
     <form onSubmit={formProps.handleSubmit(onSubmit)}>
@@ -26,6 +30,8 @@ const VehiclesForm = (props: VehiclesFormProps) => {
               Submit
             </Button>
           </Grid>
+          {!!vehicle && <ExecutionsTable vehicleId={vehicle.id} />}
+          {!!vehicle && <VehicleStatistics vehicleId={vehicle.id} />}
         </CarContainer>
       </FormProvider>
     </form>

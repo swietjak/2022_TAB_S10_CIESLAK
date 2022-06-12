@@ -26,22 +26,20 @@ const CarTakerReservationTable = () => {
   }, [dispatch, userId]);
 
   return (
-    <>
-      <form onSubmit={formProps.handleSubmit(handleConfirm)}>
-        <FormProvider {...formProps}>
-          <FormDialog
-            {...props}
-            mainContent="Renting Vehicle:"
-            title="Rent"
-            fields={fieldsLabels}
-            onClose={handleClose}
-            onConfirm={formProps.handleSubmit(handleConfirm)}
-            open={isOpen}
-          />
-          <CustomTable columns={columns} data={data} loading={loading} />
-        </FormProvider>
-      </form>
-    </>
+    <form onSubmit={formProps.handleSubmit(handleConfirm)}>
+      <FormProvider {...formProps}>
+        <FormDialog
+          {...props}
+          confirmLabel="Rent"
+          title="Rent"
+          fields={fieldsLabels}
+          onClose={handleClose}
+          onConfirm={formProps.handleSubmit(handleConfirm)}
+          open={isOpen}
+        />
+        <CustomTable columns={columns} data={data} loading={loading} />
+      </FormProvider>
+    </form>
   );
 };
 

@@ -13,18 +13,13 @@ namespace VehiclesAPI.Dtos
     public record GetServiceExecutionDto
     {
         public int id { get; set; }
-        public int vehicleId { get; set; }
-        public string vechicleBrand { get; set; }
-        public string vechicleModel { get; set; }
-        public string vin { get; set; }
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
         public string description { get; set; }
         public bool isFinished { get; set; }
-        public int vehicleCareId { get; set; }
-        public ServiceVehicleCare vehicleCare { get; set; }
-        public int offeredServiceId { get; set; }
+        public int servicePricingId { get; set; }
+        public double price { get; set; }
         public string serviceName { get; set; }
-        public string serviceExecutionerName { get; set; }
+        public string externalServicerName { get; set; }
     }
 }

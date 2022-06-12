@@ -1,9 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import Rentals from "shared/services/Rentals";
 import Reservations from "shared/services/Reservations";
-import VehicleReturns, {
-  CreateVehicleReturnParams,
-} from "shared/services/VehicleReturns";
+import VehicleReturns from "shared/services/VehicleReturns";
 import { MODULE_NAME } from "../strings";
 import {
   CreateVehicleReturnPayload,
@@ -47,7 +45,7 @@ export const getReservationArchive = createAsyncThunk(
 export const createRental = createAsyncThunk(
   `${MODULE_NAME}/createUserRental`,
   async ({ params, onSuccess }: CreateUserRentalPayload) => {
-    const data = rentals.createUserRentals(params);
+    const data = await rentals.createUserRentals(params);
     if (onSuccess) onSuccess();
     return data;
   }
@@ -56,7 +54,7 @@ export const createRental = createAsyncThunk(
 export const createVehicleReturn = createAsyncThunk(
   `${MODULE_NAME}/createVehicleReturn`,
   async ({ params, onSuccess }: CreateVehicleReturnPayload) => {
-    const data = vehicleReturns.createVehicleReturn(params);
+    const data = await vehicleReturns.createVehicleReturn(params);
     if (onSuccess) onSuccess();
     return data;
   }

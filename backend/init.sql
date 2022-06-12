@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS public.vechicles
 CREATE TABLE IF NOT EXISTS public.reservations
 (
     id serial,
-    date_from timestamp NOT NULL,
-    date_to timestamp NOT NULL,
+    date_from timestamptz NOT NULL,
+    date_to timestamptz NOT NULL,
     worker_id integer NOT NULL,
     vechicle_id integer NOT NULL,
     description text,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public.workers
 CREATE TABLE IF NOT EXISTS public.rentals
 (
     id serial,
-    date timestamp NOT NULL,
+    date timestamptz NOT NULL,
     description text,
     reservation_id integer NOT NULL,
     meter_indication integer NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.rentals
 CREATE TABLE IF NOT EXISTS public.vechicle_returns
 (
     id serial,
-    date timestamp NOT NULL,
+    date timestamptz NOT NULL,
     description text,
     meter_indication integer NOT NULL,
     fuel_consumption double precision NOT NULL,
@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS public.vechicles_cares
     id serial,
     vechicle_id integer NOT NULL,
     worker_id integer NOT NULL,
-    start_date timestamp NOT NULL,
-    end_date timestamp,
+    start_date timestamptz NOT NULL,
+    end_date timestamptz,
     PRIMARY KEY (id)
 );
 
@@ -91,8 +91,8 @@ CREATE TABLE IF NOT EXISTS public.vechicle_equipment
 CREATE TABLE IF NOT EXISTS public.car_absenses
 (
     id serial,
-    start_date timestamp NOT NULL,
-    end_date timestamp NOT NULL,
+    start_date timestamptz NOT NULL,
+    end_date timestamptz NOT NULL,
     vechicle_id integer NOT NULL,
     description text,
     PRIMARY KEY (id)
@@ -108,9 +108,8 @@ CREATE TABLE IF NOT EXISTS public.services
 CREATE TABLE IF NOT EXISTS public.service_executions
 (
     id serial,
-    vechicle_id integer NOT NULL,
-    start_date timestamp NOT NULL,
-    end_date timestamp NOT NULL,
+    start_date timestamptz NOT NULL,
+    end_date timestamptz NOT NULL,
     description text,
     is_finished boolean NOT NULL,
     vechicle_care_id integer NOT NULL,
@@ -138,8 +137,8 @@ CREATE TABLE IF NOT EXISTS public.service_pricing
     id serial,
     offered_service_id integer NOT NULL,
     price double precision NOT NULL,
-    start_date timestamp NOT NULL,
-    end_date timestamp,
+    start_date timestamptz NOT NULL,
+    end_date timestamptz,
     PRIMARY KEY (id)
 );
 
@@ -223,8 +222,8 @@ ALTER TABLE IF EXISTS public.service_executions
 
 
 ALTER TABLE IF EXISTS public.service_executions
-    ADD FOREIGN KEY (vechicle_id)
-    REFERENCES public.vechicles (id) MATCH SIMPLE
+    ADD FOREIGN KEY (vechicle_care_id)
+    REFERENCES public.vechicles_cares (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;

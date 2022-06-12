@@ -191,23 +191,22 @@ namespace VehiclesAPI.Models
 
                 entity.Property(e => e.IsFinished).HasColumnName("is_finished");
 
-                entity.Property(e => e.OfferedServiceId).HasColumnName("offered_service_id");
+                entity.Property(e => e.ServicePricingId).HasColumnName("service_pricing_id");
 
                 entity.Property(e => e.StartDate).HasColumnName("start_date");
 
                 entity.Property(e => e.VehicleCareId).HasColumnName("vechicle_care_id");
 
-                entity.Property(e => e.VehicleId).HasColumnName("vechicle_id");
 
-                entity.HasOne(d => d.OfferedService)
+                entity.HasOne(d => d.ServicePricing)
                     .WithMany(p => p.ServiceExecutions)
-                    .HasForeignKey(d => d.OfferedServiceId)
+                    .HasForeignKey(d => d.ServicePricingId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("service_executions_offered_service_id_fkey");
+                    .HasConstraintName("service_executions_service_pricing_id_fkey");
 
-                entity.HasOne(d => d.Vehicle)
+                entity.HasOne(d => d.VehicleCare)
                     .WithMany(p => p.ServiceExecutions)
-                    .HasForeignKey(d => d.VehicleId)
+                    .HasForeignKey(d => d.VehicleCareId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("service_executions_vechicle_id_fkey");
             });

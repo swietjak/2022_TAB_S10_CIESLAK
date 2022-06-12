@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
-import { PageWrapper } from "../../../pages/VehiclesForm";
+import { PageWrapper } from "../../VehiclesForm";
 import { TextField } from "shared/components";
-import { VehiclesFormFields } from "../../../pages/VehiclesForm";
+import { VehiclesFormFields } from "../../VehiclesForm";
 import { Textlabel } from "./CarComponent.styles";
 
 const CarComponent = () => {
@@ -43,6 +43,7 @@ const CarComponent = () => {
       </Grid>
       <Grid item>
         <TextField
+          type="number"
           name={VehiclesFormFields.EnginePower}
           placeholder="EnginePower"
           label="Power"

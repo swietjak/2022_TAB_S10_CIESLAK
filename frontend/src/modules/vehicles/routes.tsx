@@ -1,8 +1,9 @@
 import { paths } from "config";
+import VehiclesForm from "./components/VehiclesForm";
 import {
-  VehiclesForm,
   AdminVehiclesList,
   CareTakerVehiclesList,
+  VehicleEdit,
   WorkerVehiclesList,
 } from "./pages";
 
@@ -22,6 +23,10 @@ const routes = [
   {
     path: paths.workerVehiclesList,
     element: () => <WorkerVehiclesList />,
+  },
+  {
+    path: paths.vehiclesEdit,
+    element: () => <VehicleEdit />,
   },
 ];
 

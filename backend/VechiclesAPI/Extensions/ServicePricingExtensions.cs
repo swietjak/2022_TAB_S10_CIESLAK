@@ -14,5 +14,14 @@ namespace VehiclesAPI.Extensions
                 EndDate = item.endDate
             };
         }
+
+        public static Entity AsEntity(this ServicePricing item)
+        {
+            return new Entity
+            {
+                id = item.Id,
+                name = $"{item.OfferedService.Service.Name} - {item.Price}"
+            };
+        }
     }
 }

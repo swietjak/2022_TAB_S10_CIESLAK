@@ -9,7 +9,6 @@ namespace VehiclesAPI.Models
         {
             CarAbsenses = new HashSet<CarAbsense>();
             Reservations = new HashSet<Reservation>();
-            ServiceExecutions = new HashSet<ServiceExecution>();
             VehicleEquipments = new HashSet<VehicleEquipment>();
             VehiclesCares = new HashSet<VehiclesCare>();
         }
@@ -24,7 +23,6 @@ namespace VehiclesAPI.Models
 
         public virtual ICollection<CarAbsense> CarAbsenses { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }
-        public virtual ICollection<ServiceExecution> ServiceExecutions { get; set; }
         public virtual ICollection<VehicleEquipment> VehicleEquipments { get; set; }
         public virtual ICollection<VehiclesCare> VehiclesCares { get; set; }
     }

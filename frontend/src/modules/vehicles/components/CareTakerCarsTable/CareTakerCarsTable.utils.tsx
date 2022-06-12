@@ -1,48 +1,91 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@mui/material";
+import { paths } from "config";
+import { endOfToday, startOfToday } from "date-fns";
 import { useCallback, useMemo, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Column, Vehicle } from "shared/types";
+import { generatePath, useNavigate } from "react-router";
+import { useUserData } from "shared/hooks";
+import Servicers from "shared/services/Servicers";
+import { Column, DialogField, FieldValue, Vehicle } from "shared/types";
+import { date, mixed, object, SchemaOf, string } from "yup";
 import { actions } from "../../store";
 
-const useVehicleDelete = () => {
+export enum ServiceExecutionFields {
+  StartDate = "startDate",
+  EndDate = "endDate",
+  Servicer = "servicer",
+  ServicePricing = "servicePricing",
+  Description = "description",
+}
+
+export interface ServiceExecutionValues {
+  [ServiceExecutionFields.StartDate]: Date;
+  [ServiceExecutionFields.EndDate]: Date;
+  [ServiceExecutionFields.Servicer]: FieldValue | null;
+  [ServiceExecutionFields.ServicePricing]: FieldValue | null;
+  [ServiceExecutionFields.Description]: string;
+}
+
+export const defaultValues: ServiceExecutionValues = {
+  [ServiceExecutionFields.StartDate]: startOfToday(),
+  [ServiceExecutionFields.EndDate]: endOfToday(),
+  [ServiceExecutionFields.Servicer]: null,
+  [ServiceExecutionFields.ServicePricing]: null,
+  [ServiceExecutionFields.Description]: "",
+};
+
+export const validationSchema: SchemaOf<ServiceExecutionValues> = object()
+  .shape({
+    [ServiceExecutionFields.StartDate]: date().required("REQUIRED"),
+    [ServiceExecutionFields.EndDate]: date().required("REQUIRED"),
+    [ServiceExecutionFields.Servicer]: mixed<FieldValue>().required("REQUIRED"),
+    [ServiceExecutionFields.ServicePricing]:
+      mixed<FieldValue>().required("REQUIRED"),
+    [ServiceExecutionFields.Description]: string(),
+  })
+  .required();
+
+export const useOnSubmit = (handleClose: () => void) => {
   const dispatch = useDispatch();
+  const { userId } = useUserData();
 
   const onSuccess = useCallback(() => {
-    dispatch(actions.getVehicles({}));
-  }, [dispatch]);
+    handleClose();
+    if (userId) dispatch(actions.getCareTakerVehicles(userId));
+  }, [dispatch, handleClose, userId]);
 
   return useCallback(
-    (vehicleId: number) => {
-      dispatch(actions.deleteVehicle({ vehicleId, onSuccess }));
+    (values: ServiceExecutionValues, vehicleCareId: number) => {
+      const { servicePricing, servicer, ...params } = values;
+      if (
+        !servicer ||
+        !servicePricing ||
+        !params[ServiceExecutionFields.StartDate] ||
+        !params[ServiceExecutionFields.EndDate]
+      )
+        return;
+
+      dispatch(
+        actions.createServiceExecution({
+          params: {
+            vehicleCareId,
+            servicePricingId: servicePricing.value,
+            ...params,
+          },
+          onSuccess,
+        })
+      );
     },
     [dispatch, onSuccess]
   );
 };
 
-export const useConfirmationModal = () => {
-  const [carToDelete, setCarToDelete] = useState<number | null>(null);
-
-  const handleClose = () => setCarToDelete(null);
-  const handleOpen = (id: number) => setCarToDelete(id);
-  const handleDelete = useVehicleDelete();
-
-  const handleConfirm = useCallback(() => {
-    if (!carToDelete) return;
-    handleDelete(carToDelete);
-    handleClose();
-  }, [carToDelete, handleDelete]);
-
-  return {
-    handleClose,
-    handleOpen,
-    handleConfirm,
-    isOpen: !!carToDelete,
-  };
-};
-
 export const useColumns = (
   handleDialogOpen: (id: number) => void
 ): Column<Vehicle>[] => {
+  const navigate = useNavigate();
   return useMemo(
     () => [
       {
@@ -62,12 +105,122 @@ export const useColumns = (
         renderData: (data: Vehicle) => data.equipments.join(", "),
       },
       {
+        label: "status",
+        renderData: (data: Vehicle) => data.status || "",
+      },
+      {
         label: "",
         renderData: (data: Vehicle) => (
-          <Button variant="contained">Plan service</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (!!data.vehicleCareId) handleDialogOpen(data.vehicleCareId);
+            }}
+          >
+            Plan service
+          </Button>
+        ),
+      },
+      {
+        label: "",
+        renderData: (data: Vehicle) => (
+          <Button
+            variant="contained"
+            onClick={() =>
+              navigate(
+                generatePath(paths.vehiclesEdit, {
+                  vehicleId: data.id.toString(),
+                })
+              )
+            }
+          >
+            Edit
+          </Button>
         ),
       },
     ],
-    []
+    [handleDialogOpen, navigate]
   );
+};
+
+const servicers = new Servicers();
+
+export const useFormDialog = () => {
+  const formProps = useForm<ServiceExecutionValues>({
+    defaultValues,
+    resolver: yupResolver(validationSchema),
+    reValidateMode: "onChange",
+  });
+
+  const [selectedVehicleCareId, setSelectedVehicleCareId] = useState<
+    number | null
+  >(null);
+
+  const handleOpen = useCallback((id: number) => {
+    setSelectedVehicleCareId(id);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setSelectedVehicleCareId(null);
+  }, []);
+
+  const handleSubmit = useOnSubmit(handleClose);
+  const handleConfirm = useCallback(
+    (values: ServiceExecutionValues) => {
+      if (!!selectedVehicleCareId) handleSubmit(values, selectedVehicleCareId);
+    },
+    [handleSubmit, selectedVehicleCareId]
+  );
+
+  const externalServicer = useWatch({
+    control: formProps.control,
+    name: ServiceExecutionFields.Servicer,
+  }) as FieldValue;
+
+  const fields: DialogField[] = useMemo(
+    () => [
+      {
+        label: "start date",
+        name: ServiceExecutionFields.StartDate,
+        type: "date",
+      },
+      {
+        label: "end date",
+        name: ServiceExecutionFields.EndDate,
+        type: "date",
+      },
+      {
+        label: "servicer",
+        name: ServiceExecutionFields.Servicer,
+        type: "autocomplete",
+        getOptions: () => servicers.getServicers(),
+      },
+      {
+        label: "service pricing",
+        name: ServiceExecutionFields.ServicePricing,
+        type: "autocomplete",
+        getOptions: () => {
+          console.log(externalServicer);
+          if (!!externalServicer)
+            return servicers.getServicePricings(externalServicer.value);
+          return Promise.resolve([]);
+        },
+      },
+      {
+        label: "description",
+        name: ServiceExecutionFields.Description,
+        type: "text",
+      },
+    ],
+    [externalServicer]
+  );
+
+  return {
+    fields,
+    formProps,
+    handleClose,
+    handleOpen,
+    handleConfirm,
+    isOpen: !!selectedVehicleCareId,
+  };
 };

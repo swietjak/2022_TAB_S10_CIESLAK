@@ -7,7 +7,6 @@ namespace VehiclesAPI.Models
     {
         public OfferedService()
         {
-            ServiceExecutions = new HashSet<ServiceExecution>();
             ServicePricings = new HashSet<ServicePricing>();
         }
 
@@ -17,7 +16,6 @@ namespace VehiclesAPI.Models
 
         public virtual ExternalServicer ExternalServicer { get; set; }
         public virtual Service Service { get; set; }
-        public virtual ICollection<ServiceExecution> ServiceExecutions { get; set; }
         public virtual ICollection<ServicePricing> ServicePricings { get; set; }
     }
 }

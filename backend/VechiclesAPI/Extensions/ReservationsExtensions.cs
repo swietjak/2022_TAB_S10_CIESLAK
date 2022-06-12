@@ -61,7 +61,7 @@ namespace VehiclesAPI.Extensions
             };
         }
 
-        private static ReservationStatus GetReservationStatus(Rental? rental, VehicleReturn? vehicleReturn)
+        public static ReservationStatus GetReservationStatus(Rental? rental, VehicleReturn? vehicleReturn)
         {
             if (vehicleReturn != null) return ReservationStatus.Finished;
             if (rental != null) return ReservationStatus.Started;

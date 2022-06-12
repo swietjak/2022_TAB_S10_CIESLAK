@@ -8,3 +8,4 @@ export { default as FormDatePicker } from "./FormDatePicker";
 export { default as CustomTabs } from "./CustomTabs";
 export { default as Layout } from "./Layout";
 export { default as FormDialog } from "./FormDialog";
+export { default as FormAutocomplete } from "./FormAutocomplete";

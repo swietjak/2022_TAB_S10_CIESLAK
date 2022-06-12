@@ -15,22 +15,20 @@ import FieldComponent from "./FieldComponent";
 
 interface FormDialogProps extends DialogProps {
   title: string;
-  mainContent: string;
   fields: DialogField[];
   summaryContent: SummaryEntry[];
   onConfirm: () => void;
+  confirmLabel: string;
 }
 
 const FormDialog = ({
   title,
-  mainContent,
   summaryContent,
   fields,
   onConfirm,
+  confirmLabel,
   ...props
 }: FormDialogProps) => {
-  const DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
-
   const handleClose = () => {
     if (props.onClose) props.onClose({}, "backdropClick");
   };
@@ -63,7 +61,7 @@ const FormDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={onConfirm}>Subscribe</Button>
+        <Button onClick={onConfirm}>{confirmLabel}</Button>
       </DialogActions>
     </Dialog>
   );

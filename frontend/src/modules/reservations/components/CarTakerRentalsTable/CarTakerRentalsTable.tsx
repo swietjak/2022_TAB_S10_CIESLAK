@@ -31,7 +31,7 @@ const CarTakerRentalsTable = () => {
         <FormProvider {...formProps}>
           <FormDialog
             {...props}
-            mainContent="Renting Vehicle:"
+            confirmLabel="Rent"
             title="Rent"
             fields={fieldsLabels}
             onClose={handleClose}

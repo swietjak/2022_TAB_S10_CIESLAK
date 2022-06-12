@@ -37,13 +37,19 @@ export interface DialogField {
   label: string;
   type: DialogFieldType;
   name: string;
+  getOptions?: () => Promise<Entity[]>;
 }
 
-export type DialogFieldType = "date" | "text" | "number";
+export type DialogFieldType = "date" | "text" | "number" | "autocomplete";
 
 export interface VehicleSummary {
   id: number;
   brand: string;
   model: string;
   vin: string;
+}
+
+export interface Entity {
+  id: number;
+  name: string;
 }
