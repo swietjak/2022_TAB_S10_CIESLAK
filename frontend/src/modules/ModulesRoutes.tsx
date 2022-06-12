@@ -4,16 +4,23 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useUserData } from "shared/hooks";
 import { helloRoutes } from "./home";
 import { reservationsRoutes } from "./reservations";
+import { servicersRoutes } from "./servicers";
+import { statisticsRoutes } from "./statistics";
 import { vehiclesRoutes } from "./vehicles";
 
-const routes = [...reservationsRoutes, ...helloRoutes, ...vehiclesRoutes];
+const routes = [
+  ...reservationsRoutes,
+  ...helloRoutes,
+  ...vehiclesRoutes,
+  ...servicersRoutes,
+  ...statisticsRoutes,
+];
 
 const ModalRoutes = () => {
   const { initialPath, userId } = useUserData();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("chuj");
     if (!userId) navigate(paths.login);
   }, [userId]); //eslint-disable-line
 

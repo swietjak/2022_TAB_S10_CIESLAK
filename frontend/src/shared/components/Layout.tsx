@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import { styled } from "@mui/material";
+import { useState } from "react";
 import { ModalRoutes } from "modules";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
 type LayoutProps = {};
+
+export const PageWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(3, 2),
+}));
 
 const Layout = (props: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,7 +23,9 @@ const Layout = (props: LayoutProps) => {
         drawerOpen={isSidebarOpen}
         closeDialog={() => setIsSidebarOpen(false)}
       />
-      <ModalRoutes />
+      <PageWrapper>
+        <ModalRoutes />
+      </PageWrapper>
     </>
   );
 };

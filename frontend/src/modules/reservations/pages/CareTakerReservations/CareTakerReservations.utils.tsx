@@ -1,5 +1,6 @@
 import { TabEntry } from "shared/types";
 import {
+  ArchivesTable,
   CarTakerRentalsTable,
   CarTakerReservationTable,
 } from "../../components";
@@ -13,6 +14,10 @@ export const useTabEntries = (): TabEntry[] => {
     {
       label: "RENTALS",
       panel: <CarTakerRentalsTable />,
+    },
+    {
+      label: "ARCHIVE",
+      panel: <ArchivesTable />,
     },
   ];
 };

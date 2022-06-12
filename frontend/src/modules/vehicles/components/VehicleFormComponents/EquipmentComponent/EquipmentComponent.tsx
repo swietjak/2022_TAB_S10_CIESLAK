@@ -1,20 +1,17 @@
 import { Cancel } from "@mui/icons-material";
 import { Button, Grid, IconButton, Typography } from "@mui/material";
-import { PageWrapper } from "modules/vehicles/pages/VehiclesForm/VehiclesForm.styles";
-import React from "react";
+import { PageWrapper } from "modules/vehicles/components/VehiclesForm/VehiclesForm.styles";
 import { useCallback } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Select, TextField } from "shared/components";
-import { VehiclesFormFields } from "../../../pages/VehiclesForm";
-import { useEquipmentsOptions } from "./EquipmentComponent.utils";
+import { FormAutocomplete, TextField } from "shared/components";
+import Vehicles from "shared/services/Vehicles";
+import { VehiclesFormFields } from "../../VehiclesForm";
+
+const vehicles = new Vehicles();
 
 const EquipmentComponent = () => {
   const { control } = useFormContext();
-  const {
-    fields: namesFields,
-    append: appendName,
-    remove: removeName,
-  } = useFieldArray({
+  const { append: appendName, remove: removeName } = useFieldArray({
     control,
     name: VehiclesFormFields.EquipmentNames,
   });
@@ -30,7 +27,7 @@ const EquipmentComponent = () => {
 
   const addEq = useCallback(() => {
     appendQuantity(0);
-    appendName({});
+    appendName({ label: "" });
   }, [appendName, appendQuantity]);
 
   const removeEq = useCallback(
@@ -41,7 +38,6 @@ const EquipmentComponent = () => {
     [removeName, removeQuantity]
   );
 
-  const equipmentsOptionsMock = useEquipmentsOptions();
   return (
     <PageWrapper item container direction="column" xs={6} spacing={2}>
       <Grid item>
@@ -56,9 +52,9 @@ const EquipmentComponent = () => {
           spacing={2}
         >
           <Grid item>
-            <Select
-              options={equipmentsOptionsMock}
-              placeholder="Eq name"
+            <FormAutocomplete
+              getOptions={vehicles.getEquipments}
+              label="Equipment name"
               key={`name-${i}`}
               name={`${VehiclesFormFields.EquipmentNames}[${i}]`}
             />

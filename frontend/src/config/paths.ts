@@ -7,7 +7,13 @@ const paths = {
   adminVehiclesList: "/admin-vehicles-list",
   careTakerVehiclesList: "/care-taker-vehicles-list",
   workerVehiclesList: "/worker-vehicles-list",
+  workerReservationList: "/worker-reservation-list",
   vehiclesForm: "/admin-vehicles-list/new",
+  vehiclesEdit: "/edit/:vehicleId",
+  servicersTable: "/servicers",
+  servicersEdit: "/servicers/:servicerId",
+  servicerForm: "/servicers/new",
+  workersStatistics: "/workers/statistics",
   goodbye: "/goodbye",
 };
 

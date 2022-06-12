@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VehiclesAPI.Models;
 using VehiclesAPI.Dtos;
+using VehiclesAPI.Extensions;
 
 namespace VehiclesAPI.Controllers
 {
@@ -67,6 +69,37 @@ namespace VehiclesAPI.Controllers
             {
                 return StatusCode(400, "something went wrong");
             }
+        }
+
+
+        [HttpGet("care-taker-rentals/{careTakerId}")]
+        public ActionResult<IEnumerable<GetCareTakerRentalsDto>> GetCareTakerRentals(int careTakerId)
+        {
+            var existingUser = this.context.Workers.Where(worker => worker.Id == careTakerId).FirstOrDefault();
+
+            if (existingUser == null)
+            {
+                return StatusCode(400, "No such user");
+            }
+
+            var isUserAdmin = existingUser?.Isadmin ?? false;
+            var careTakerVehicles = this.context.VehiclesCares
+            .Where(care => care.WorkerId == careTakerId)
+            .Select(care => care.VehicleId)
+            .ToList();
+
+            var careTakerRentals = this.context.Reservations
+            .Where(reservation => careTakerVehicles.Any(vehicleId => vehicleId == reservation.Id) || isUserAdmin)
+            .Include(reservation => reservation.Vehicle)
+            .Include(reservation => reservation.Rental)
+            .Include(reservation => reservation.Worker)
+            .Include(reservation => reservation.Rental)
+            .ThenInclude(rental => rental.VehicleReturn)
+            .Where(reservation => reservation.Rental.VehicleReturn == null)
+            .Select(reservation => reservation.AsGetCareTakerRentalsDto())
+            .ToList();
+
+            return careTakerRentals;
         }
     }
 }

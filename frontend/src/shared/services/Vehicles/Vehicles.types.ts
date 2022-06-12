@@ -18,3 +18,12 @@ export interface CreateVehicleParams {
   engineCapacity: number;
   equipments: Equipment[];
 }
+export interface UpdateVehicleParams {
+  id: number;
+  brand: string;
+  model: string;
+  vin: string;
+  enginePower: number;
+  engineCapacity: number;
+  equipments: Equipment[];
+}

@@ -12,5 +12,6 @@ namespace VehiclesAPI.Models
         public DateTime? EndDate { get; set; }
 
         public virtual OfferedService OfferedService { get; set; }
+        public virtual ICollection<ServiceExecution> ServiceExecutions { get; set; }
     }
 }

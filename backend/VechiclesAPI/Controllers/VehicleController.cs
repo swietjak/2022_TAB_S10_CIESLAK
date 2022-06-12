@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using VehiclesAPI.Models;
 using VehiclesAPI.Dtos;
 using VehiclesAPI.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace VehiclesAPI.Controllers
 {
@@ -82,11 +83,14 @@ namespace VehiclesAPI.Controllers
 
         private IEnumerable<int> GetAllCurrentServices(DateTime startDate, DateTime endDate)
         {
-            return (
-                from s in context.ServiceExecutions
-                where s.EndDate >= startDate && s.StartDate <= endDate
-                select s.VehicleId
-            ).ToList().Distinct();
+            var currentServices = this.context.ServiceExecutions
+            .Include(execution => execution.VehicleCare)
+            .Where(execution => execution.EndDate >= startDate && execution.StartDate <= endDate)
+            .Select(execution => execution.Id)
+            .Distinct()
+            .ToList();
+
+            return currentServices;
         }
 
         private IEnumerable<int> GetAllCurrentAbsence(DateTime startDate, DateTime endDate)
@@ -99,25 +103,49 @@ namespace VehiclesAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public GetVehiclesDto GetVehiclesById(int id)
+        public GetVehicleDetailsDto GetVehiclesById(int id)
         {
-            return (
-                from v in context.Vehicles
-                where v.Id == id
-                select new GetVehiclesDto
-                {
-                    id = v.Id,
-                    vin = v.Vin,
-                    brand = v.Brand,
-                    model = v.Model,
-                    equipments = (
-                        from i in context.VehicleEquipments
-                        join e in context.Equipments
-                        on i.EquipmentId equals e.Id
-                        where i.VehicleId == v.Id
-                        select e.Name
-                        ).ToArray()
-                }).First();
+            var vehicleDetails = this.context.Vehicles
+            .Where(vehicle => vehicle.Id == id)
+            .Include(vehicle => vehicle.VehicleEquipments)
+            .ThenInclude(ve => ve.Equipment)
+            .Select(vehicle => vehicle.AsGetVehicleDetailsDto()).First();
+
+            return vehicleDetails;
+        }
+
+        [HttpGet("{vehicleId}/statistics")]
+        public GetVehicleStatisticsDto GetVehicleStatisticsById(int vehicleId)
+        {
+            var vehicleDetails = this.context.Vehicles
+            .Where(vehicle => vehicle.Id == vehicleId)
+            .Include(vehicle => vehicle.VehiclesCares)
+                .ThenInclude(care => care.ServiceExecutions)
+                    .ThenInclude(execution => execution.ServicePricing)
+            .Include(vehicle => vehicle.Reservations)
+                .ThenInclude(reservstion => reservstion.Rental)
+                    .ThenInclude(rental => rental.VehicleReturn)
+            .Select(vehicle => vehicle.AsGetVehicleStatisticsDto()).First();
+
+            return vehicleDetails;
+        }
+
+        [HttpGet("care-taker-vehicles/{id}")]
+        public IEnumerable<GetCareTakerVehiclesDto> GetCareTakerVehicles(int id)
+        {
+            var vehicles = this.context.VehiclesCares
+            .Include(care => care.Vehicle)
+                .ThenInclude(vehicle => vehicle.VehicleEquipments)
+                    .ThenInclude(eq => eq.Equipment)
+            .Where(care => care.Id == id)
+            .Include(care => care.Vehicle)
+                .ThenInclude(vehicle => vehicle.Reservations)
+                    .ThenInclude(reservation => reservation.Rental)
+                        .ThenInclude(rental => rental.VehicleReturn)
+            .Include(care => care.ServiceExecutions)
+            .Select(care => care.Vehicle.AsGetCareTakerVehicleDto(care))
+            .ToList();
+            return vehicles;
         }
 
         [HttpPost]
@@ -147,6 +175,113 @@ namespace VehiclesAPI.Controllers
             {
                 return StatusCode(400, e.StackTrace);
             }
+        }
+
+        private async Task<bool> DeleteEquipmentsRelations(NewEquipmentEntry[] valueEquipments, ICollection<VehicleEquipment> vehicleEquipments, int vehicleId)
+        {
+            try
+            {
+                var deletableVehicles = vehicleEquipments
+                .Where(vehicleEquipment => !valueEquipments.Any(valueEquipment => valueEquipment.id == vehicleEquipment.EquipmentId) && vehicleEquipment.VehicleId == vehicleId)
+                .ToList();
+
+                foreach (var item in deletableVehicles)
+                {
+                    this.context.Remove(item);
+                }
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+        }
+
+        private async Task<bool> EditEquipmentsRelations(NewEquipmentEntry[] valueEquipments, ICollection<VehicleEquipment> vehicleEquipments, int vehicleId)
+        {
+            try
+            {
+                var editableVehicles = vehicleEquipments
+                .Where(vehicleEquipment => valueEquipments.Any(valueEquipment => valueEquipment.id == vehicleEquipment.EquipmentId) && vehicleEquipment.VehicleId == vehicleId)
+                .ToList();
+                foreach (var item in editableVehicles)
+                {
+                    item.Amount = valueEquipments.Where(eq => eq.id == item.EquipmentId).Sum(eq => eq.amount);
+                    this.context.Update(item);
+                }
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+        }
+
+        private async Task<bool> AddEquipmentsRelations(NewEquipmentEntry[] valueEquipments, ICollection<VehicleEquipment> vehicleEquipments, int vehicleId)
+        {
+            try
+            {
+                var addableVehicles = valueEquipments.Where(valueEquipment => !vehicleEquipments.Any(vehicleEquipment => valueEquipment.id == vehicleEquipment.EquipmentId)).ToList();
+                foreach (var item in addableVehicles)
+                {
+                    var newVehicleEq = new VehicleEquipment
+                    {
+                        Amount = item.amount,
+                        VehicleId = vehicleId,
+                        EquipmentId = item.id
+                    };
+                    await this.context.VehicleEquipments.AddAsync(newVehicleEq);
+                }
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+        }
+
+        [HttpPut("{vehicleId}")]
+        public async Task<IActionResult> CreateVehicle(int vehicleId, [FromBody] CreateVehicleDto value)
+        {
+            var existingVehicle = this.context.Vehicles
+            .Where(vehicle => vehicle.Id == vehicleId)
+            .Include(vehicle => vehicle.VehicleEquipments).FirstOrDefault();
+
+            if (existingVehicle == null) return StatusCode(400, "No such vehicle");
+
+            var res = await DeleteEquipmentsRelations(value.equipments, existingVehicle.VehicleEquipments, existingVehicle.Id);
+
+            if (!res) return StatusCode(400, "Something wrong with deleting");
+
+            res = await EditEquipmentsRelations(value.equipments, existingVehicle.VehicleEquipments, existingVehicle.Id);
+            if (!res) return StatusCode(400, "Something wrong with editing");
+
+            res = await AddEquipmentsRelations(value.equipments, existingVehicle.VehicleEquipments, existingVehicle.Id);
+            if (!res) return StatusCode(400, "Something wrong with adding");
+
+            existingVehicle.Brand = value.brand;
+            existingVehicle.EngineCapacity = value.engineCapacity;
+            existingVehicle.EnginePower = value.enginePower;
+            existingVehicle.Model = value.model;
+            existingVehicle.Vin = value.vin;
+
+            try
+            {
+                this.context.Vehicles.Update(existingVehicle);
+                await this.context.SaveChangesAsync();
+            }
+            catch (System.Exception e)
+            {
+                return StatusCode(400, e.StackTrace);
+            }
+
+            return StatusCode(200);
         }
 
         [HttpDelete("{id}")]

@@ -1,4 +1,9 @@
-import { CarRental, CarRepair, ViewList } from "@mui/icons-material";
+import {
+  CarRental,
+  CarRepair,
+  ViewList,
+  HomeRepairService,
+} from "@mui/icons-material";
 import { paths } from "config";
 import { useUserData } from "shared/hooks";
 
@@ -8,14 +13,35 @@ const userSidebarEntries = [
 ];
 
 const careTakerSidebarEntries = [
-  ...userSidebarEntries,
-  { label: "Manage cars", Icon: CarRepair, path: paths.userReservationsTable },
+  {
+    label: "Manage cars",
+    Icon: CarRepair,
+    path: paths.careTakerVehiclesList,
+  },
+  {
+    label: "Manage Reservations",
+    Icon: CarRental,
+    path: paths.careTakerReservationsTable,
+  },
+];
+
+const adminSidebarEntries = [
+  {
+    label: "Manage cars",
+    Icon: CarRepair,
+    path: paths.adminVehiclesList,
+  },
+  {
+    label: "Manage Servicers",
+    Icon: HomeRepairService,
+    path: paths.servicersTable,
+  },
 ];
 
 export const useSidebarEntries = () => {
   const { hasAdminPermissions, hasCarePermissions } = useUserData();
 
-  if (hasAdminPermissions || hasAdminPermissions)
-    return careTakerSidebarEntries;
+  if (hasAdminPermissions) return adminSidebarEntries;
+  if (hasCarePermissions) return careTakerSidebarEntries;
   return userSidebarEntries;
 };

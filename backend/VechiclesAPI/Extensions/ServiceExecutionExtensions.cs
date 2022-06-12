@@ -9,13 +9,29 @@ namespace VehiclesAPI.Extensions
         {
             return new ServiceExecution
             {
-                VehicleId = item.vehicleId,
                 StartDate = item.startDate,
                 EndDate = item.endDate,
                 Description = item.description,
                 VehicleCareId = item.vehicleCareId,
-                OfferedServiceId = item.offeredServiceId,
+                ServicePricingId = item.servicePricingId,
                 IsFinished = false
+            };
+        }
+
+        public static GetServiceExecutionDto AsGetServiceExecutionDto(this ServiceExecution item)
+        {
+            return new GetServiceExecutionDto
+            {
+                description = item.Description,
+                endDate = item.EndDate,
+                externalServicerName = item.ServicePricing.OfferedService.ExternalServicer.Name,
+                id = item.Id,
+                price = item.ServicePricing.Price,
+                isFinished = item.IsFinished,
+                serviceName = item.ServicePricing.OfferedService.Service.Name,
+                servicePricingId = item.ServicePricing.Id,
+                startDate = item.StartDate,
+
             };
         }
     }
