@@ -31,7 +31,7 @@ namespace VehiclesAPI.Controllers
             {
                 Date = value.Date,
                 Description = value.Description,
-                MeterIndication = value.MeterIndication,
+                MeterIndication = value.meterIndicator,
                 ReservationId = existingReservation.Id
             };
 

@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import Reservations from "shared/services/Reservations";
 import Vehicles, { GetAvailableVehiclesParams } from "shared/services/Vehicles";
 import { GetVehiclesParams } from "shared/services/Vehicles";
@@ -20,6 +20,8 @@ export const getVehicles = createAsyncThunk(
   `${MODULE_NAME}/getVehicles`,
   (params: GetVehiclesParams) => vehicles.getVehicles(params)
 );
+
+export const resetVehicles = createAction(`${MODULE_NAME}/resetVehicles`);
 
 export const getVehicleDetails = createAsyncThunk(
   `${MODULE_NAME}/getVehicleDetails`,

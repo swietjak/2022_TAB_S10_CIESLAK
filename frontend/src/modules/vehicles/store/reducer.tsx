@@ -19,6 +19,7 @@ import {
   getVehicleDetails,
   getVehicles,
   getVehicleStatistics,
+  resetVehicles,
   updateVehicle,
 } from "./actions";
 
@@ -66,6 +67,9 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(getVehicles.rejected, (state, action) => {
       resource.setFailed(state.getVehicles, action.error.message);
+    })
+    .addCase(resetVehicles, (state) => {
+      resource.reset(state.getVehicles, []);
     })
     .addCase(getVehicleDetails.pending, (state) => {
       resource.setPending(state.getVehicleDetails);

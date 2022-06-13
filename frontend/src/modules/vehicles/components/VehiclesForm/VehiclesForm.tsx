@@ -27,7 +27,7 @@ const VehiclesForm = ({ vehicle }: VehiclesFormProps) => {
               variant="contained"
               type="submit"
             >
-              Submit
+              Save
             </Button>
           </Grid>
           {!!vehicle && <ExecutionsTable vehicleId={vehicle.id} />}

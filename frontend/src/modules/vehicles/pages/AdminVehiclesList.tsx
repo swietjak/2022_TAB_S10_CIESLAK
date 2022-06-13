@@ -12,6 +12,10 @@ const AdminVehiclesList = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.getVehicles({}));
+    return () => {
+      console.log("Koniec");
+      dispatch(actions.resetVehicles());
+    };
   }, []); //eslint-disable-line
 
   return (

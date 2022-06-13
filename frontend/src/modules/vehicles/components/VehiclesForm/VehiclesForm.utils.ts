@@ -7,6 +7,7 @@ import { Equipment, FieldValue, VehicleDetails } from "shared/types";
 import { actions } from "../../store";
 import { useCallback } from "react";
 import { paths } from "config";
+import { useUserData } from "shared/hooks";
 
 export enum VehiclesFormFields {
   Brand = "brand",
@@ -68,10 +69,14 @@ export const useOnSubmit = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { vehicleId } = useParams();
+  const { hasAdminPermissions } = useUserData();
 
   const onSuccess = useCallback(() => {
-    navigate(paths.careTakerVehiclesList);
-  }, [navigate]);
+    const path = hasAdminPermissions
+      ? paths.adminVehiclesList
+      : paths.careTakerVehiclesList;
+    navigate(path);
+  }, [hasAdminPermissions, navigate]);
 
   return (values: VehiclesFormValues) => {
     const { equipmentsName, equipmentsQuantities, ...createParams } = values;

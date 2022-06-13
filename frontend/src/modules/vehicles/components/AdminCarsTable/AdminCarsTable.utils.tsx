@@ -1,9 +1,23 @@
 import { DeleteForever } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
+import { paths } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { generatePath, useNavigate } from "react-router";
 import { Vehicle } from "shared/types";
 import { actions } from "../../store";
+
+export const useNavigation = () => {
+  const navigate = useNavigate();
+  return useCallback(
+    (data: Vehicle) => {
+      navigate(
+        generatePath(paths.vehiclesEdit, { vehicleId: data.id.toString() })
+      );
+    },
+    [navigate]
+  );
+};
 
 const useVehicleDelete = () => {
   const dispatch = useDispatch();
@@ -23,25 +37,28 @@ const useVehicleDelete = () => {
 export const useConfirmationModal = () => {
   const [carToDelete, setCarToDelete] = useState<number | null>(null);
 
-  const handleClose = () => setCarToDelete(null);
-  const handleOpen = (id: number) => setCarToDelete(id);
+  const handleConfirmationClose = () => setCarToDelete(null);
+  const handleConfirmationOpen = (id: number) => setCarToDelete(id);
   const handleDelete = useVehicleDelete();
 
-  const handleConfirm = useCallback(() => {
+  const handleConfirmationConfirm = useCallback(() => {
     if (!carToDelete) return;
     handleDelete(carToDelete);
-    handleClose();
+    handleConfirmationClose();
   }, [carToDelete, handleDelete]);
 
   return {
-    handleClose,
-    handleOpen,
-    handleConfirm,
-    isOpen: !!carToDelete,
+    handleConfirmationClose,
+    handleConfirmationOpen,
+    handleConfirmationConfirm,
+    isConfirmationOpen: !!carToDelete,
   };
 };
 
-export const useColumns = (handleDialogOpen: (id: number) => void) => {
+export const useColumns = (
+  handleConfirmationOpen: (id: number) => void,
+  handleExecutionOpen: (id: number) => void
+) => {
   return useMemo(
     () => [
       {
@@ -61,14 +78,33 @@ export const useColumns = (handleDialogOpen: (id: number) => void) => {
         renderData: (data: Vehicle) => data.equipments.join(", "),
       },
       {
-        label: "",
+        label: "Actions",
         renderData: (data: Vehicle) => (
-          <IconButton onClick={() => handleDialogOpen(data.id)}>
+          <IconButton
+            onClick={(e) => {
+              handleConfirmationOpen(data.id);
+              e.stopPropagation();
+            }}
+          >
             <DeleteForever color="error" />
           </IconButton>
         ),
       },
+      {
+        label: "",
+        renderData: (data: Vehicle) => (
+          <Button
+            variant="contained"
+            onClick={(e) => {
+              handleExecutionOpen(data.id);
+              e.stopPropagation();
+            }}
+          >
+            Add execution
+          </Button>
+        ),
+      },
     ],
-    [handleDialogOpen]
+    [handleConfirmationOpen, handleExecutionOpen]
   );
 };

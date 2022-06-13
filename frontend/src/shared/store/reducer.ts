@@ -3,6 +3,12 @@ import resource, { Resource } from "shared/resource";
 import { LoadingStatus, UserData } from "shared/types";
 import { login, resetUserData } from "./actions";
 
+const getUserLocalStorageItem = () => {
+  const userItem = localStorage.getItem("user");
+  if (!userItem) return null;
+  return JSON.parse(userItem) as UserData;
+};
+
 export interface State {
   loading: LoadingStatus;
   error?: string | null;
@@ -12,9 +18,7 @@ export interface State {
 const initialState: State = {
   loading: LoadingStatus.Idle,
   error: null,
-  userData: resource.getInitial(
-    JSON.parse(localStorage.getItem("user") || "") as UserData | null
-  ),
+  userData: resource.getInitial(getUserLocalStorageItem()),
 };
 
 export default createReducer(initialState, (builder) =>

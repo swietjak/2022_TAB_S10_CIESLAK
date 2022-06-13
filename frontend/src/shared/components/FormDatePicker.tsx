@@ -4,11 +4,12 @@ import { useController, useFormContext } from "react-hook-form";
 
 interface FormDatePickerProps {
   name: string;
+  label?: string;
 }
 
 const DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
-const FormDatePicker = ({ name }: FormDatePickerProps) => {
+const FormDatePicker = ({ name, label }: FormDatePickerProps) => {
   const { control } = useFormContext();
   const {
     field: fieldProps,
@@ -18,6 +19,7 @@ const FormDatePicker = ({ name }: FormDatePickerProps) => {
   return (
     <DatePicker
       {...fieldProps}
+      label={label}
       inputFormat={DEFAULT_DATE_FORMAT}
       renderInput={(params) => (
         <TextField error={!!error} helperText={error?.message} {...params} />

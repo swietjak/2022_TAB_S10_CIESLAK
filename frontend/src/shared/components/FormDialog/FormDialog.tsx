@@ -1,17 +1,32 @@
 import {
   Button,
-  Dialog,
+  Dialog as BaseDialog,
   DialogActions,
   DialogContent,
   DialogProps,
   DialogTitle,
   DialogContentText,
   Grid,
+  styled,
 } from "@mui/material";
 import { SummaryEntry, DialogField } from "shared/types";
-import FormDatePicker from "../FormDatePicker";
-import TextField from "../TextField";
 import FieldComponent from "./FieldComponent";
+
+const Dialog = styled(BaseDialog)({
+  "& .MuiPaper-root": {
+    minHeight: 600,
+  },
+  "& .MuiDialogContent-root": {
+    paddingTop: 20,
+    overflowY: "hidden",
+  },
+});
+
+const FieldsWrapper = styled(Grid)({
+  "& >div": {
+    marginBottom: 20,
+  },
+});
 
 interface FormDialogProps extends DialogProps {
   title: string;
@@ -51,13 +66,13 @@ const FormDialog = ({
             ))}
           </Grid>
         </DialogContentText>
-        <Grid container direction="column" spacing={2}>
+        <FieldsWrapper container direction="column">
           {fields.map((field) => (
             <Grid item>
               <FieldComponent {...field} />
             </Grid>
           ))}
-        </Grid>
+        </FieldsWrapper>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>

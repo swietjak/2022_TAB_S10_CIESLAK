@@ -1,11 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "@mui/material";
-import { paths } from "config";
 import { endOfToday, startOfToday } from "date-fns";
 import { useCallback, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { generatePath, useNavigate } from "react-router";
 import { useUserData } from "shared/hooks";
 import Servicers from "shared/services/Servicers";
 import { Column, DialogField, FieldValue, Vehicle } from "shared/types";
@@ -85,7 +83,6 @@ export const useOnSubmit = (handleClose: () => void) => {
 export const useColumns = (
   handleDialogOpen: (id: number) => void
 ): Column<Vehicle>[] => {
-  const navigate = useNavigate();
   return useMemo(
     () => [
       {
@@ -113,39 +110,23 @@ export const useColumns = (
         renderData: (data: Vehicle) => (
           <Button
             variant="contained"
-            onClick={() => {
+            onClick={(e) => {
               if (!!data.vehicleCareId) handleDialogOpen(data.vehicleCareId);
+              e.stopPropagation();
             }}
           >
             Plan service
           </Button>
         ),
       },
-      {
-        label: "",
-        renderData: (data: Vehicle) => (
-          <Button
-            variant="contained"
-            onClick={() =>
-              navigate(
-                generatePath(paths.vehiclesEdit, {
-                  vehicleId: data.id.toString(),
-                })
-              )
-            }
-          >
-            Edit
-          </Button>
-        ),
-      },
     ],
-    [handleDialogOpen, navigate]
+    [handleDialogOpen]
   );
 };
 
 const servicers = new Servicers();
 
-export const useFormDialog = () => {
+export const useServiceFormDialog = () => {
   const formProps = useForm<ServiceExecutionValues>({
     defaultValues,
     resolver: yupResolver(validationSchema),

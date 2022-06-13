@@ -49,6 +49,7 @@ namespace VehiclesAPI.Controllers
             var reservations = GetAllCurrentReservations(startDate, endDate);
             var services = GetAllCurrentServices(startDate, endDate);
             var absences = GetAllCurrentAbsence(startDate, endDate);
+
             return (
                 from v in context.Vehicles
                 select new GetVehiclesDto
@@ -85,8 +86,8 @@ namespace VehiclesAPI.Controllers
         {
             var currentServices = this.context.ServiceExecutions
             .Include(execution => execution.VehicleCare)
-            .Where(execution => execution.EndDate >= startDate && execution.StartDate <= endDate)
-            .Select(execution => execution.Id)
+            .Where(execution => execution.EndDate >= startDate && execution.StartDate <= endDate && !execution.IsFinished)
+            .Select(execution => execution.VehicleCare.VehicleId)
             .Distinct()
             .ToList();
 

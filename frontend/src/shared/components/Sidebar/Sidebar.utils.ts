@@ -3,12 +3,18 @@ import {
   CarRepair,
   ViewList,
   HomeRepairService,
+  BarChart,
+  DirectionsCarFilled,
 } from "@mui/icons-material";
 import { paths } from "config";
 import { useUserData } from "shared/hooks";
 
 const userSidebarEntries = [
-  { label: "Reservable cars", Icon: CarRental, path: paths.workerVehiclesList },
+  {
+    label: "Reservable cars",
+    Icon: DirectionsCarFilled,
+    path: paths.workerVehiclesList,
+  },
   { label: "Reservations", Icon: ViewList, path: paths.userReservationsTable },
 ];
 
@@ -26,6 +32,12 @@ const careTakerSidebarEntries = [
 ];
 
 const adminSidebarEntries = [
+  ...userSidebarEntries,
+  {
+    label: "Manage Reservations",
+    Icon: CarRental,
+    path: paths.careTakerReservationsTable,
+  },
   {
     label: "Manage cars",
     Icon: CarRepair,
@@ -35,6 +47,11 @@ const adminSidebarEntries = [
     label: "Manage Servicers",
     Icon: HomeRepairService,
     path: paths.servicersTable,
+  },
+  {
+    label: "Workers Statistics",
+    Icon: BarChart,
+    path: paths.workersStatistics,
   },
 ];
 
