@@ -23,6 +23,7 @@ const Dialog = styled(BaseDialog)({
 });
 
 const FieldsWrapper = styled(Grid)({
+  paddingTop: 30,
   "& >div": {
     marginBottom: 20,
   },

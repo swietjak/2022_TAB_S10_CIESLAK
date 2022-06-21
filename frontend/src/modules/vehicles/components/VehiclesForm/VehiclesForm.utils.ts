@@ -18,6 +18,7 @@ export enum VehiclesFormFields {
   EquipmentNames = "equipmentsName",
   EquipmentQuantities = "equipmentsQuantities",
   Equipments = "Equipments",
+  CareTaker = "careTaker",
 }
 
 export interface VehiclesFormValues {
@@ -28,6 +29,7 @@ export interface VehiclesFormValues {
   [VehiclesFormFields.EnginePower]: number;
   [VehiclesFormFields.EquipmentQuantities]: number[];
   [VehiclesFormFields.EquipmentNames]: FieldValue[];
+  [VehiclesFormFields.CareTaker]: FieldValue;
 }
 
 export const getDefaultValues = (
@@ -46,6 +48,7 @@ export const getDefaultValues = (
     [VehiclesFormFields.EnginePower]: vehicle?.enginePower || 0,
     [VehiclesFormFields.EquipmentQuantities]: equipmentsQuantities || [],
     [VehiclesFormFields.EquipmentNames]: equipmentsNames || [],
+    [VehiclesFormFields.CareTaker]: { label: "", value: 0 },
   };
 };
 
@@ -62,6 +65,7 @@ export const validationSchema: SchemaOf<VehiclesFormValues> = object()
     [VehiclesFormFields.EquipmentNames]: array().of(
       mixed().required("REQUIRED")
     ),
+    [VehiclesFormFields.CareTaker]: mixed(),
   })
   .required();
 
@@ -79,7 +83,8 @@ export const useOnSubmit = () => {
   }, [hasAdminPermissions, navigate]);
 
   return (values: VehiclesFormValues) => {
-    const { equipmentsName, equipmentsQuantities, ...createParams } = values;
+    const { equipmentsName, equipmentsQuantities, careTaker, ...createParams } =
+      values;
     const equipments: Equipment[] = equipmentsName.map(({ value }, i) => ({
       id: value,
       amount: equipmentsQuantities[i],
@@ -89,7 +94,7 @@ export const useOnSubmit = () => {
       return dispatch(
         actions.createVehicle({
           onSuccess,
-          params: { equipments, ...createParams },
+          params: { equipments, careTakerId: careTaker.value, ...createParams },
         })
       );
 

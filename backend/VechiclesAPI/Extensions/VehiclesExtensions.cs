@@ -111,7 +111,8 @@ namespace VehiclesAPI.Extensions
                 totalKilometers = lastRental == null ? 0 : lastRental.MeterIndication,
                 totalFuel = vehicle.Reservations.Select(reservation => reservation.Rental.VehicleReturn.FuelConsumption).Sum(),
                 totalPrice = vehicle.VehiclesCares.SelectMany(care => care.ServiceExecutions).Sum(execution => execution.ServicePricing.Price),
-                totalReservations = vehicle.Reservations.Count()
+                totalReservations = vehicle.Reservations.Count(),
+                totalRentals = vehicle.Reservations.Where(reservation => reservation.Rental != null).Count(),
             };
         }
     }

@@ -1,4 +1,4 @@
-import { WorkerStatistics } from "shared/types";
+import { Entity, WorkerStatistics } from "shared/types";
 import Api from "./Api";
 
 class Workers extends Api {
@@ -6,6 +6,11 @@ class Workers extends Api {
     const { data } = await this.api.get<WorkerStatistics[]>(
       `/Worker/statistics`
     );
+    return data;
+  };
+
+  public getCareTakers = async () => {
+    const { data } = await this.api.get<Entity[]>(`/Worker/care-takers`);
     return data;
   };
 }

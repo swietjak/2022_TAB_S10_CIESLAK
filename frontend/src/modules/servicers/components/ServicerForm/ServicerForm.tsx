@@ -39,13 +39,14 @@ const ServicerForm = ({ servicer }: ServicerFormProps) => {
               <Grid item container spacing={3}>
                 <Grid item>
                   <FormAutocomplete
-                    label="Service"
+                    label="Service name"
                     name={`${ServicerFormFields.ServicePricings}[${i}].${ServicePricingFields.Service}`}
                     getOptions={() => servicers.getServices()}
                   />
                 </Grid>
                 <Grid item>
                   <TextField
+                    label="Price"
                     name={`${ServicerFormFields.ServicePricings}[${i}].${ServicePricingFields.Price}`}
                   />
                 </Grid>

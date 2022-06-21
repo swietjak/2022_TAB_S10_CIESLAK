@@ -11,7 +11,7 @@ import { useUserData } from "shared/hooks";
 
 const userSidebarEntries = [
   {
-    label: "Reservable cars",
+    label: "Reservable Cars",
     Icon: DirectionsCarFilled,
     path: paths.workerVehiclesList,
   },
@@ -29,17 +29,17 @@ const careTakerSidebarEntries = [
     Icon: CarRental,
     path: paths.careTakerReservationsTable,
   },
+  ...userSidebarEntries,
 ];
 
 const adminSidebarEntries = [
-  ...userSidebarEntries,
   {
     label: "Manage Reservations",
     Icon: CarRental,
     path: paths.careTakerReservationsTable,
   },
   {
-    label: "Manage cars",
+    label: "Manage Cars",
     Icon: CarRepair,
     path: paths.adminVehiclesList,
   },
@@ -53,6 +53,7 @@ const adminSidebarEntries = [
     Icon: BarChart,
     path: paths.workersStatistics,
   },
+  ...userSidebarEntries,
 ];
 
 export const useSidebarEntries = () => {

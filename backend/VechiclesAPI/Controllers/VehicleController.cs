@@ -50,27 +50,19 @@ namespace VehiclesAPI.Controllers
             var services = GetAllCurrentServices(startDate, endDate);
             var absences = GetAllCurrentAbsence(startDate, endDate);
 
-            return (
-                from v in context.Vehicles
-                select new GetVehiclesDto
-                {
-                    id = v.Id,
-                    vin = v.Vin,
-                    brand = v.Brand,
-                    model = v.Model,
-                    equipments = (
-                        from i in context.VehicleEquipments
-                        join e in context.Equipments
-                        on i.EquipmentId equals e.Id
-                        where i.VehicleId == v.Id
-                        select e.Name
-                        ).ToArray()
-                }).OrderBy(v => v.brand)
-                .Where(v => v.brand.Contains(string.IsNullOrEmpty(brand) ? "" : brand))
-                .Where(v => !reservations.Contains(v.id))
-                .Where(v => !services.Contains(v.id))
-                .Where(v => !absences.Contains(v.id))
-                .ToList();
+            var vehicles = this.context.Vehicles
+            .Include(vehicle => vehicle.VehicleEquipments)
+                .ThenInclude(ve => ve.Equipment)
+            .Where(v => !v.IsDeleted)
+            .Where(v => v.Brand.Contains(string.IsNullOrEmpty(brand) ? "" : brand))
+            .Where(v => !reservations.Contains(v.Id))
+            .Where(v => !services.Contains(v.Id))
+            .Where(v => !absences.Contains(v.Id))
+            .OrderBy(v => v.Brand)
+            .Select(v => v.AsGetVehicleDto())
+            .ToList();
+
+            return vehicles;
         }
 
         private IEnumerable<int> GetAllCurrentReservations(DateTime startDate, DateTime endDate)
@@ -138,7 +130,7 @@ namespace VehiclesAPI.Controllers
             .Include(care => care.Vehicle)
                 .ThenInclude(vehicle => vehicle.VehicleEquipments)
                     .ThenInclude(eq => eq.Equipment)
-            .Where(care => care.Id == id)
+            .Where(care => care.WorkerId == id)
             .Include(care => care.Vehicle)
                 .ThenInclude(vehicle => vehicle.Reservations)
                     .ThenInclude(reservation => reservation.Rental)
@@ -150,14 +142,14 @@ namespace VehiclesAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateVehicle([FromBody] CreateVehicleDto value)
+        public async Task<IActionResult> CreateVehicle([FromBody] CreateVehicleDto value)
         {
             var newVehicle = value.AsVehicle();
             this.context.Vehicles.Add(newVehicle);
 
             try
             {
-                this.context.SaveChanges();
+                await this.context.SaveChangesAsync();
             }
             catch (System.Exception e)
             {
@@ -168,9 +160,31 @@ namespace VehiclesAPI.Controllers
 
             try
             {
-                this.context.VehicleEquipments.AddRange(vehicleEquipmentList);
-                this.context.SaveChanges();
-                return StatusCode(201, newVehicle.Id);
+                await this.context.VehicleEquipments.AddRangeAsync(vehicleEquipmentList);
+                await this.context.SaveChangesAsync();
+            }
+            catch (System.Exception e)
+            {
+                return StatusCode(400, e.StackTrace);
+            }
+
+            var careTaker = await this.context.Workers.FirstOrDefaultAsync(worker => worker.Id == value.careTakerId);
+
+            if (careTaker == null) return StatusCode(201);
+
+            var newVehicleCare = new VehiclesCare
+            {
+                StartDate = DateTime.UtcNow,
+                VehicleId = newVehicle.Id,
+                WorkerId = careTaker.Id
+            };
+
+            await this.context.VehiclesCares.AddAsync(newVehicleCare);
+
+            try
+            {
+                await this.context.SaveChangesAsync();
+                return StatusCode(201);
             }
             catch (System.Exception e)
             {
@@ -248,7 +262,7 @@ namespace VehiclesAPI.Controllers
         }
 
         [HttpPut("{vehicleId}")]
-        public async Task<IActionResult> CreateVehicle(int vehicleId, [FromBody] CreateVehicleDto value)
+        public async Task<IActionResult> EditVehicle(int vehicleId, [FromBody] EditVehicleDto value)
         {
             var existingVehicle = this.context.Vehicles
             .Where(vehicle => vehicle.Id == vehicleId)

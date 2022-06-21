@@ -17,6 +17,7 @@ export interface CreateVehicleParams {
   enginePower: number;
   engineCapacity: number;
   equipments: Equipment[];
+  careTakerId?: number;
 }
 export interface UpdateVehicleParams {
   id: number;

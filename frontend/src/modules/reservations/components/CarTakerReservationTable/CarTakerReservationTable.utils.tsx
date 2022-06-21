@@ -22,7 +22,7 @@ export enum RentalFormFields {
 
 export const fieldsLabels: DialogField[] = [
   { name: RentalFormFields.Meters, label: "Meter indicator", type: "number" },
-  { name: RentalFormFields.Description, label: "description", type: "text" },
+  { name: RentalFormFields.Description, label: "Description", type: "text" },
   { name: RentalFormFields.Date, label: "Rental date", type: "date" },
 ];
 

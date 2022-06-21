@@ -29,5 +29,20 @@ namespace VehiclesAPI.Controllers
 
             return workersStatistics;
         }
+
+        [HttpGet("care-takers")]
+        public IEnumerable<Entity> GetCareTakers()
+        {
+            var workers = context.Workers
+            .Where(worker => worker.Hascarepermissions ?? false)
+            .Select(worker => new Entity
+            {
+                name = $"{worker.FirstName} {worker.Surname}",
+                id = worker.Id
+            })
+            .ToList();
+
+            return workers;
+        }
     }
 }

@@ -44,14 +44,8 @@ const EquipmentComponent = () => {
         <Typography>Equipment</Typography>
       </Grid>
       {quantitiesFields.map((_, i) => (
-        <Grid
-          item
-          container
-          key={`grid-${i}`}
-          alignItems="flex-start"
-          spacing={2}
-        >
-          <Grid item>
+        <Grid item container key={`grid-${i}`} alignItems="flex-start">
+          <Grid item xs={3}>
             <FormAutocomplete
               getOptions={vehicles.getEquipments}
               label="Equipment name"
@@ -59,7 +53,7 @@ const EquipmentComponent = () => {
               name={`${VehiclesFormFields.EquipmentNames}[${i}]`}
             />
           </Grid>
-          <Grid item>
+          <Grid item xs={3}>
             <TextField
               type="number"
               placeholder="Eq quantity"
@@ -67,7 +61,7 @@ const EquipmentComponent = () => {
               name={`${VehiclesFormFields.EquipmentQuantities}[${i}]`}
             />
           </Grid>
-          <Grid item>
+          <Grid item xs={2}>
             <IconButton onClick={() => removeEq(i)} size="large">
               <Cancel />
             </IconButton>

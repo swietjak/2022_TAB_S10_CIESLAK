@@ -69,9 +69,8 @@ const FormAutocomplete = ({
 
   return (
     <Autocomplete
+      sx={{ width: 500 }}
       value={value}
-      id="asynchronous-demo"
-      sx={{ width: 300 }}
       open={open}
       onOpen={() => {
         setOpen(true);
